@@ -1,0 +1,9 @@
+{
+  "key.minesweeper.open": "Открыть сапёр",
+  "category.minesweeper": "Minesweeper",
+  "gui.minesweeper.title": "Сапёр",
+  "button.minesweeper.close": "Готово",
+  "button.minesweeper.restart": "Рестарт",
+  "screen.minesweeper.wins": "Побед: %s"
+
+}

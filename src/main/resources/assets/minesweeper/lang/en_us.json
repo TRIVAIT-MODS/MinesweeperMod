@@ -1,0 +1,9 @@
+{
+  "key.minesweeper.open": "Open Minesweeper",
+  "category.minesweeper": "Minesweeper",
+  "gui.minesweeper.title": "Minesweeper",
+  "button.minesweeper.close": "Done",
+  "button.minesweeper.restart": "Restart",
+  "screen.minesweeper.wins": "Wins: %s"
+
+}
