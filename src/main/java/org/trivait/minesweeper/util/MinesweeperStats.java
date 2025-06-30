@@ -18,7 +18,7 @@ public class MinesweeperStats {
         try (FileReader reader = new FileReader(FILE)) {
             return GSON.fromJson(reader, MinesweeperStats.class);
         } catch (Exception e) {
-            return new MinesweeperStats(); // default
+            return new MinesweeperStats();
         }
     }
 
