@@ -67,7 +67,7 @@ public class MinesweeperButton extends ButtonWidget {
             }
 
             if (MinecraftClient.getInstance().currentScreen instanceof MinesweeperScreen screen) {
-                screen.init(); // Перерисовка кнопок
+                screen.init();
             }
         }
     }
@@ -77,24 +77,22 @@ public class MinesweeperButton extends ButtonWidget {
 
         boolean hovered = this.isHovered();
         if (hovered) {
-            if (button == 1) { // ПКМ
+            if (button == 1) {
                 if (!cell.isRevealed && !board.gameOver) {
                     cell.isFlagged = !cell.isFlagged;
 
-                    // Звук при флажке
                     ClientPlayerEntity player = MinecraftClient.getInstance().player;
                     if (player != null) {
                         player.playSound(SoundEvents.UI_BUTTON_CLICK.value(), 1.0F, 1.0F);
                     }
 
-                    // Перерисовать
                     if (MinecraftClient.getInstance().currentScreen instanceof MinesweeperScreen screen) {
                         screen.init();
                     }
                 }
                 return true;
-            } else if (button == 0) { // ЛКМ
-                this.onPress(); // оставляем логику onPress()
+            } else if (button == 0) {
+                this.onPress();
                 return true;
             }
         }
