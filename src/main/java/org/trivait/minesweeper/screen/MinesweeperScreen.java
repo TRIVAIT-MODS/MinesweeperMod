@@ -59,7 +59,7 @@ public class MinesweeperScreen extends Screen {
                         x, y,
                         board.cells[x][y],
                         btn -> {},
-                        stats// ЛКМ обрабатывается внутри кнопки
+                        stats
                 ));
             }
         }
