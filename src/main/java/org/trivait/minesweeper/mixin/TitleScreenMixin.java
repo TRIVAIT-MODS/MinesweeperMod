@@ -28,7 +28,7 @@ public abstract class TitleScreenMixin extends Screen {
         ).width(20).texture(Identifier.of("minesweeper", "icon/button"), 16, 16).build();
 
         // ставим кнопку справа от стандартных
-        minesweeperBtn.setPosition(this.width / 2 + 110, this.height / 4 + 48);
+        minesweeperBtn.setPosition(this.width / 2 + 104, this.height / 4 + 48);
         this.addDrawableChild(minesweeperBtn);
     }
 }
