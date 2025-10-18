@@ -1,15 +1,12 @@
 package org.trivait.minesweeper.screen;
 
-import com.mojang.blaze3d.pipeline.RenderPipeline;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.trivait.minesweeper.MinesweeperModClient;
@@ -173,102 +170,108 @@ public class MinesweeperScreen extends Screen {
             mc.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.ENTITY_FIREWORK_ROCKET_BLAST, 1.0f, 1.0f));
         }
     }
+
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         super.render(context, mouseX, mouseY, delta);
 
-        // Заголовок: "Minesweeper — WxH, Mines: N"
+        // Заголовок
         String head = String.format("%s — %d×%d, %s: %d",
                 Text.translatable("menu.minesweeper").getString(),
-                this.w, this.h,
+                w, h,
                 Text.translatable("config.minesweeper.mines").getString(),
-                this.mines
-        );
-        int headX = this.width / 2 - this.client.textRenderer.getWidth(head) / 2;
-        int headY = this.gridY - 28;
-        context.drawText(this.client.textRenderer, head, headX, headY, 0xFFFFFF, false);
+                mines);
+        int headX = this.width / 2 - mc.textRenderer.getWidth(head) / 2;
+        int headY = gridY - 28;
+        context.drawText(mc.textRenderer, head, headX, headY, 0xFFFFFFFF, false);
 
-        // Статус: win / playing / lose
-        Text status = this.won
+        // Статус
+        Text status = won
                 ? Text.translatable("gui.minesweeper.status.win")
-                : (this.alive
-                ? Text.translatable("gui.minesweeper.status.playing")
+                : (alive ? Text.translatable("gui.minesweeper.status.playing")
                 : Text.translatable("gui.minesweeper.status.lose"));
+        int statusColor = won ? 0x00FF00 : (alive ? 0xFFFFFF : 0xFF5555);
+        int statusX = this.width / 2 - mc.textRenderer.getWidth(status) / 2;
+        int statusY = gridY - 12;
+        context.drawText(mc.textRenderer, status, statusX, statusY, statusColor, false);
 
-        int statusColor = this.won ? 0x00FF00 : (this.alive ? 0xFFFFFF : 0xFF5555);
-        int statusX = this.width / 2 - this.client.textRenderer.getWidth(status) / 2;
-        int statusY = this.gridY - 12;
-        context.drawText(this.client.textRenderer, status, statusX, statusY, statusColor, false);
+        // Поле
+        for (int yy = 0; yy < h; yy++) {
+            for (int xx = 0; xx < w; xx++) {
+                int x = gridX + xx * cellSize;
+                int y = gridY + yy * cellSize;
 
-        // Отрисовка сетки
-        for (int yy = 0; yy < this.h; yy++) {
-            for (int xx = 0; xx < this.w; xx++) {
-                int x = this.gridX + xx * this.cellSize;
-                int y = this.gridY + yy * this.cellSize;
-                Cell c = this.grid[yy][xx];
+                Cell c = grid[yy][xx];
+                int border = 0xFF555555;
+                int bg = c.revealed ? 0xFF2D2D2D : 0xFF454545;
 
-                int border = 0xFF555555;      // серый
-                int bg = c.revealed ? 0xFF2A2A2A : 0xFF444444;
-
-                // фон и рамка
-                context.fill(x, y, x + this.cellSize, y + this.cellSize, bg);
-                context.fill(x, y, x + this.cellSize, y + 1, border);
-                context.fill(x, y + this.cellSize - 1, x + this.cellSize, y + this.cellSize, border);
-                context.fill(x, y, x + 1, y + this.cellSize, border);
-                context.fill(x + this.cellSize - 1, y, x + this.cellSize, y + this.cellSize, border);
+                context.fill(x, y, x + cellSize, y + cellSize, bg);
+                context.fill(x, y, x + cellSize, y + 1, border);
+                context.fill(x, y + cellSize - 1, x + cellSize, y + cellSize, border);
+                context.fill(x, y, x + 1, y + cellSize, border);
+                context.fill(x + cellSize - 1, y, x + cellSize, y + cellSize, border);
 
                 if (c.revealed) {
-                    // Мина
-                    if (c.mine && !this.won) {
-                        Identifier TNT_SIDE = Identifier.of("textures/block/tnt_side.png");
+                    if (c.mine && !won) {
+                        Identifier TNT_SIDE = Identifier.ofVanilla("textures/block/tnt_side.png");
                         int texSize = 16;
-                        int offsetX = x + (this.cellSize - texSize) / 2;
-                        int offsetY = y + (this.cellSize - texSize) / 2;
-                        context.drawTexture(RenderPipelines.GUI_TEXTURED,TNT_SIDE, offsetX, offsetY, 0, 0, texSize, texSize, texSize, texSize);
-                    }
-                    // Число соседних мин
-                    else if (c.adjacent > 0) {
+                        int offsetX = x + (cellSize - texSize) / 2;
+                        int offsetY = y + (cellSize - texSize) / 2;
+                        context.drawTexture(
+                                RenderPipelines.GUI_TEXTURED,
+                                TNT_SIDE,
+                                offsetX, offsetY,
+                                0, 0,
+                                texSize, texSize,
+                                texSize, texSize,
+                                -1
+                        );
+                    } else if (c.adjacent > 0) {
                         int color = switch (c.adjacent) {
-                            case 1 -> 0xFF3DD3FE;
-                            case 2 -> 0xFF3CB371;
-                            case 3 -> 0xFFEE2222;
-                            case 4 -> 0xFF7777FF;
-                            case 5 -> 0xFFFF5555;
-                            case 6 -> 0xFF228B22;
+                            case 1 -> 0xFF3EB2FF;
+                            case 2 -> 0xFF41D45E;
+                            case 3 -> 0xFFFF4E4E;
+                            case 4 -> 0xFF7757FF;
+                            case 5 -> 0xFFFFA84E;
+                            case 6 -> 0xFF4EE0FF;
                             case 7 -> 0xFFFFFFFF;
-                            default -> 0xFFAAAAAA;
+                            default -> 0xFFBBBBBB;
                         };
-
-                        String numStr = Integer.toString(c.adjacent);
-                        Text numBold = Text.literal(numStr).styled(s -> s.withBold(true));
-                        OrderedText ordered = numBold.asOrderedText();
-
                         String num = Integer.toString(c.adjacent);
-                        int tx = x + (cellSize - mc.textRenderer.getWidth(num)) / 2;
+
+                        // Цифры — жирные, без изменения размера
+                        Text numText = Text.literal(num).styled(s -> s.withBold(true));
+                        int tx = x + (cellSize - mc.textRenderer.getWidth(numText)) / 2;
                         int ty = y + (cellSize - mc.textRenderer.fontHeight) / 2;
-                        context.drawText(mc.textRenderer, num, tx, ty, color, false);
+                        context.drawText(mc.textRenderer, numText, tx, ty, color, false);
                     }
-                }
-                // Флажки
-                else if (c.flagged) {
-                    if (!this.alive) {
+                } else if (c.flagged) {
+                    if (!alive) {
                         if (c.mine) {
                             int pole = 0xFF222222;
                             int flag = 0xFFFF0000;
-                            context.fill(x + this.cellSize / 2 - 1, y + 4, x + this.cellSize / 2 + 1, y + this.cellSize - 4, pole);
-                            context.fill(x + this.cellSize / 2, y + 4, x + this.cellSize - 6, y + 10, flag);
+                            context.fill(x + cellSize / 2 - 1, y + 4, x + cellSize / 2 + 1, y + cellSize - 4, pole);
+                            context.fill(x + cellSize / 2, y + 4, x + cellSize - 6, y + 10, flag);
                         } else {
-                            Identifier BARRIER = Identifier.of("textures/item/barrier.png");
+                            Identifier BARRIER = Identifier.ofVanilla("textures/item/barrier.png");
                             int texSize = 16;
-                            int offsetX = x + (this.cellSize - texSize) / 2;
-                            int offsetY = y + (this.cellSize - texSize) / 2;
-                            context.drawTexture(RenderPipelines.GUI_TEXTURED,BARRIER, offsetX, offsetY, 0, 0, texSize, texSize, texSize, texSize);
+                            int offsetX = x + (cellSize - texSize) / 2;
+                            int offsetY = y + (cellSize - texSize) / 2;
+                            context.drawTexture(
+                                    RenderPipelines.GUI_TEXTURED,
+                                    BARRIER,
+                                    offsetX, offsetY,
+                                    0, 0,
+                                    texSize, texSize,
+                                    texSize, texSize,
+                                    -1
+                            );
                         }
                     } else {
                         int pole = 0xFF222222;
                         int flag = 0xFFFF0000;
-                        context.fill(x + this.cellSize / 2 - 1, y + 4, x + this.cellSize / 2 + 1, y + this.cellSize - 4, pole);
-                        context.fill(x + this.cellSize / 2, y + 4, x + this.cellSize - 6, y + 10, flag);
+                        context.fill(x + cellSize / 2 - 1, y + 4, x + cellSize / 2 + 1, y + cellSize - 4, pole);
+                        context.fill(x + cellSize / 2, y + 4, x + cellSize - 6, y + 10, flag);
                     }
                 }
             }
