@@ -18,21 +18,22 @@
 		"main": [
 			"org.trivait.minesweeper.MineSweeperMod"
 		],
-		"fabric-datagen": [
-			"org.trivait.minesweeper.MineSweeperModDataGenerator"
+		"modmenu": [
+			"org.trivait.minesweeper.modmenu.ModMenuIntegration"
 		],
 		"client": [
-			"org.trivait.minesweeper.MineSweeperClient"
+			"org.trivait.minesweeper.MinesweeperModClient"
 		]
 	},
 	"mixins": [
 		"minesweeper.mixins.json"
 	],
 	"depends": {
-		"fabricloader": ">=0.16.14",
-		"minecraft": "~1.21.3",
+		"fabricloader": ">=0.17.3",
+		"minecraft": "~1.21",
 		"java": ">=21",
-		"fabric-api": "*"
+		"fabric-api": "*",
+		"modmenu": ">=11.0.3"
 	},
 	"suggests": {
 		"another-mod": "*"

@@ -3,7 +3,8 @@
 	"package": "org.trivait.minesweeper.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
-		"ExampleMixin"
+		"TitleScreenMixin",
+		"GameMenuScreenMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

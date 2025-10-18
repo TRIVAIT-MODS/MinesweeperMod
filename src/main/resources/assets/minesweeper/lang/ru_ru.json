@@ -1,9 +1,16 @@
 {
-  "key.minesweeper.open": "Открыть сапёр",
-  "category.minesweeper": "Minesweeper",
-  "gui.minesweeper.title": "Сапёр",
-  "button.minesweeper.close": "Готово",
-  "button.minesweeper.restart": "Рестарт",
-  "screen.minesweeper.wins": "Побед: %s"
+  "menu.minesweeper": "Сапёр",
 
+  "config.minesweeper.title": "Настройки Сапёра",
+  "config.minesweeper.width": "Ширина поля",
+  "config.minesweeper.height": "Высота поля",
+  "config.minesweeper.mines": "Количество мин",
+
+  "gui.minesweeper.restart": "Рестарт",
+  "gui.done": "Готово",
+  "gui.save": "Сохранить",
+
+  "gui.minesweeper.status.playing": "Игра идёт",
+  "gui.minesweeper.status.win": "Победа!",
+  "gui.minesweeper.status.lose": "Поражение."
 }
