@@ -224,7 +224,7 @@ public class MinesweeperScreen extends Screen {
                         int texSize = 16;
                         int offsetX = x + (this.cellSize - texSize) / 2;
                         int offsetY = y + (this.cellSize - texSize) / 2;
-                        context.drawTexture(RenderPipeline::get,TNT_SIDE, offsetX, offsetY, 0, 0, texSize, texSize, texSize, texSize);
+                        context.drawTexture(RenderPipelines.GUI_TEXTURED,TNT_SIDE, offsetX, offsetY, 0, 0, texSize, texSize, texSize, texSize);
                     }
                     // Число соседних мин
                     else if (c.adjacent > 0) {
@@ -269,7 +269,7 @@ public class MinesweeperScreen extends Screen {
                             int texSize = 16;
                             int offsetX = x + (this.cellSize - texSize) / 2;
                             int offsetY = y + (this.cellSize - texSize) / 2;
-                            context.drawTexture(RenderLayer::getGuiTextured,BARRIER, offsetX, offsetY, 0, 0, texSize, texSize, texSize, texSize);
+                            context.drawTexture(RenderPipelines.GUI_TEXTURED,BARRIER, offsetX, offsetY, 0, 0, texSize, texSize, texSize, texSize);
                         }
                     } else {
                         int pole = 0xFF222222;
