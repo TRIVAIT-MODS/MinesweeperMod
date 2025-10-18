@@ -2,6 +2,7 @@ package org.trivait.minesweeper.screen;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.RenderPipelines;
+import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -98,27 +99,27 @@ public class MinesweeperScreen extends Screen {
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+    public boolean mouseClicked(Click click, boolean doubled) {
         if (!alive) {
-            if (MinesweeperModClient.getConfig().quickRestartOnLose && button == 0) {
+            if (MinesweeperModClient.getConfig().quickRestartOnLose && click.button() == 0) {
                 this.init();
                 return true;
             }
-            return super.mouseClicked(mouseX, mouseY, button);
+            return super.mouseClicked(click, doubled);
         }
 
-        int x = (int)((mouseX - gridX) / cellSize);
-        int y = (int)((mouseY - gridY) / cellSize);
-        if (x < 0 || x >= w || y < 0 || y >= h) return super.mouseClicked(mouseX, mouseY, button);
+        int x = (int)((click.x() - gridX) / cellSize);
+        int y = (int)((click.y() - gridY) / cellSize);
+        if (x < 0 || x >= w || y < 0 || y >= h) return super.mouseClicked(click, doubled);
 
         Cell c = grid[y][x];
 
-        if (button == 1) {
+        if (click.button() == 1) {
             if (!c.revealed) c.flagged = !c.flagged;
             return true;
         }
 
-        if (button == 0) {
+        if (click.button() == 0) {
             if (firstClick) {
                 placeMinesAvoiding(x, y);
                 firstClick = false;
@@ -130,7 +131,7 @@ public class MinesweeperScreen extends Screen {
             }
             return true;
         }
-        return super.mouseClicked(mouseX, mouseY, button);
+        return super.mouseClicked(click, doubled);
     }
 
     private void reveal(int x, int y) {
