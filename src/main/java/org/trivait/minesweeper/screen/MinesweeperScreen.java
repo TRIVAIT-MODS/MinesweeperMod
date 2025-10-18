@@ -243,17 +243,10 @@ public class MinesweeperScreen extends Screen {
                         Text numBold = Text.literal(numStr).styled(s -> s.withBold(true));
                         OrderedText ordered = numBold.asOrderedText();
 
-                        float scale = 1.15F;
-                        int numW = this.client.textRenderer.getWidth(ordered);
-                        int numH = 9;
-
-                        float tx = (x + (this.cellSize - numW * scale) / 2f) / scale;
-                        float ty = (y + (this.cellSize - numH * scale) / 2f) / scale;
-
-                        context.getMatrices().push();
-                        context.getMatrices().scale(scale, scale, 1.0f);
-                        context.drawText(this.client.textRenderer, ordered, (int) tx, (int) ty, color, false);
-                        context.getMatrices().pop();
+                        String num = Integer.toString(c.adjacent);
+                        int tx = x + (cellSize - mc.textRenderer.getWidth(num)) / 2;
+                        int ty = y + (cellSize - mc.textRenderer.fontHeight) / 2;
+                        context.drawText(mc.textRenderer, num, tx, ty, color, false);
                     }
                 }
                 // Флажки
