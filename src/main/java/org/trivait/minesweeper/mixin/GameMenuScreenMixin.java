@@ -32,7 +32,7 @@ public abstract class GameMenuScreenMixin extends Screen {
                 int buttonX = button.getX();
                 int buttonY = button.getY();
                 int buttonWidth = button.getWidth();
-                minesweeperBtn.setPosition(buttonX + buttonWidth + 5, buttonY);
+                minesweeperBtn.setPosition(buttonX + buttonWidth + 5, buttonY + 24);
                 break;
             }
         }
