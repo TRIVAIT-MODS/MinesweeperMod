@@ -7,9 +7,9 @@
   "config.minesweeper.mines": "Mines count",
 
   "gui.minesweeper.restart": "Restart",
+  "gui.minesweeper.wins": "Wins: %s",
   "gui.done": "Done",
   "gui.save": "Save",
-
   "gui.minesweeper.status.playing": "Game in progress",
   "gui.minesweeper.status.win": "Victory!",
   "gui.minesweeper.status.lose": "Defeat."

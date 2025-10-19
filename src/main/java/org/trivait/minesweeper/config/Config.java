@@ -6,4 +6,6 @@ public class Config {
     public int mines = 40;
 
     public boolean quickRestartOnLose = true;
+
+    public int wins = 0;
 }

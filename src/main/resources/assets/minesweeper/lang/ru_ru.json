@@ -7,9 +7,9 @@
   "config.minesweeper.mines": "Количество мин",
 
   "gui.minesweeper.restart": "Рестарт",
+  "gui.minesweeper.wins": "Побед: %s",
   "gui.done": "Готово",
   "gui.save": "Сохранить",
-
   "gui.minesweeper.status.playing": "Игра идёт",
   "gui.minesweeper.status.win": "Победа!",
   "gui.minesweeper.status.lose": "Поражение."
