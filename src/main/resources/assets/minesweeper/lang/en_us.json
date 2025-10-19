@@ -1,9 +1,16 @@
 {
-  "key.minesweeper.open": "Open Minesweeper",
-  "category.minesweeper": "Minesweeper",
-  "gui.minesweeper.title": "Minesweeper",
-  "button.minesweeper.close": "Done",
-  "button.minesweeper.restart": "Restart",
-  "screen.minesweeper.wins": "Wins: %s"
+  "menu.minesweeper": "Minesweeper",
 
+  "config.minesweeper.title": "Minesweeper Settings",
+  "config.minesweeper.width": "Grid width",
+  "config.minesweeper.height": "Grid height",
+  "config.minesweeper.mines": "Mines count",
+
+  "gui.minesweeper.restart": "Restart",
+  "gui.minesweeper.wins": "Wins: %s",
+  "gui.done": "Done",
+  "gui.save": "Save",
+  "gui.minesweeper.status.playing": "Game in progress",
+  "gui.minesweeper.status.win": "Victory!",
+  "gui.minesweeper.status.lose": "Defeat."
 }
