@@ -5,6 +5,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
@@ -351,18 +352,20 @@ public class MinesweeperScreen extends Screen {
                 context.fill(x, y, x + 1, y + cellSize, border);
                 context.fill(x + cellSize - 1, y, x + cellSize, y + cellSize, border);
                 if (c.revealed) {
-                    float alpha = animActive ? Math.min(1f, c.revealProgress) : 1f;
                     if (c.mine && !won) {
-                        Identifier TNT_SIDE = Identifier.ofVanilla("textures/block/tnt_side.png");
-                        int offsetX = x + (cellSize - texSizeAdjust) / 2;
-                        int offsetY = y + (cellSize - texSizeAdjust) / 2;
-                        RenderSystem.enableBlend();
-                        RenderSystem.defaultBlendFunc();
-                        RenderSystem.setShaderColor(1f, 1f, 1f, alpha);
-                        context.drawTexture(TNT_SIDE, offsetX, offsetY, 0, 0,
-                                texSizeAdjust, texSizeAdjust, texSizeAdjust, texSizeAdjust);
-                        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
-                        RenderSystem.disableBlend();
+                        if (c.flagged && !alive) {
+                            Identifier FLAG = Identifier.of(MinesweeperModClient.MOD_ID, "textures/gui/flag.png");
+                            int offsetX = x + (cellSize - texSizeAdjust) / 2;
+                            int offsetY = y + (cellSize - texSizeAdjust) / 2;
+                            context.drawTexture(FLAG, offsetX, offsetY, 0, 0,
+                                    texSizeAdjust, texSizeAdjust, texSizeAdjust, texSizeAdjust);
+                        } else {
+                            Identifier TNT_SIDE = Identifier.ofVanilla("textures/block/tnt_side.png");
+                            int offsetX = x + (cellSize - texSizeAdjust) / 2;
+                            int offsetY = y + (cellSize - texSizeAdjust) / 2;
+                            context.drawTexture(TNT_SIDE, offsetX, offsetY, 0, 0,
+                                    texSizeAdjust, texSizeAdjust, texSizeAdjust, texSizeAdjust);
+                        }
                     } else if (c.adjacent > 0) {
                         int color = switch (c.adjacent) {
                             case 1 -> 0xFF3EB2FF;
@@ -380,20 +383,23 @@ public class MinesweeperScreen extends Screen {
                         context.getMatrices().scale(textScale, textScale, 1f);
                         int tx = (int)((x + cellSize/2) / textScale - mc.textRenderer.getWidth(numText)/2);
                         int ty = (int)((y + cellSize/2 - mc.textRenderer.fontHeight/2) / textScale);
-                        RenderSystem.enableBlend();
-                        RenderSystem.defaultBlendFunc();
-                        RenderSystem.setShaderColor(1f, 1f, 1f, alpha);
                         context.drawText(mc.textRenderer, numText, tx, ty, color, false);
-                        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
-                        RenderSystem.disableBlend();
                         context.getMatrices().pop();
                     }
                 } else if (c.flagged) {
-                    Identifier FLAG = Identifier.of(MinesweeperModClient.MOD_ID, "textures/gui/flag.png");
-                    int offsetX = x + (cellSize - texSizeAdjust) / 2;
-                    int offsetY = y + (cellSize - texSizeAdjust) / 2;
-                    context.drawTexture(FLAG, offsetX, offsetY, 0, 0,
-                            texSizeAdjust, texSizeAdjust, texSizeAdjust, texSizeAdjust);
+                    if (!alive && !won && !c.mine) {
+                        Identifier BARRIER = Identifier.ofVanilla("textures/item/barrier.png");
+                        int offsetX = x + (cellSize - texSizeAdjust) / 2;
+                        int offsetY = y + (cellSize - texSizeAdjust) / 2;
+                        context.drawTexture(BARRIER, offsetX, offsetY, 0, 0,
+                                texSizeAdjust, texSizeAdjust, texSizeAdjust, texSizeAdjust);
+                    } else {
+                        Identifier FLAG = Identifier.of(MinesweeperModClient.MOD_ID, "textures/gui/flag.png");
+                        int offsetX = x + (cellSize - texSizeAdjust) / 2;
+                        int offsetY = y + (cellSize - texSizeAdjust) / 2;
+                        context.drawTexture(FLAG, offsetX, offsetY, 0, 0,
+                                texSizeAdjust, texSizeAdjust, texSizeAdjust, texSizeAdjust);
+                    }
                 }
 
                 context.getMatrices().pop();
