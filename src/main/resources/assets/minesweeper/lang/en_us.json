@@ -1,9 +1,39 @@
 {
-  "key.minesweeper.open": "Open Minesweeper",
-  "category.minesweeper": "Minesweeper",
-  "gui.minesweeper.title": "Minesweeper",
-  "button.minesweeper.close": "Done",
-  "button.minesweeper.restart": "Restart",
-  "screen.minesweeper.wins": "Wins: %s"
+  "menu.minesweeper": "Minesweeper",
 
+  "config.minesweeper.title": "Minesweeper Settings",
+  "config.minesweeper.width": "Grid width",
+  "config.minesweeper.height": "Grid height",
+  "config.minesweeper.mines": "Mines count",
+  "config.minesweeper.animations": "Animations",
+  "config.minesweeper.button_position": "Main menu button position",
+  "config.minesweeper.pause_button_position": "Pause menu button position",
+
+  "config.minesweeper.main_menu_button_position.left_singleplayer": "Left: Singleplayer",
+  "config.minesweeper.main_menu_button_position.left_multiplayer": "Left: Multiplayer",
+  "config.minesweeper.main_menu_button_position.left_realms": "Left: Realms",
+  "config.minesweeper.main_menu_button_position.left_mods": "Left: Mods",
+  "config.minesweeper.main_menu_button_position.right_singleplayer": "Right: Singleplayer",
+  "config.minesweeper.main_menu_button_position.right_multiplayer": "Right: Multiplayer",
+  "config.minesweeper.main_menu_button_position.right_realms": "Right: Realms",
+  "config.minesweeper.main_menu_button_position.right_mods": "Right: Mods",
+
+  "config.minesweeper.pause_menu_button_position.left_same_row": "Left: Row 1",
+  "config.minesweeper.pause_menu_button_position.left_next_row": "Left: Row 2",
+  "config.minesweeper.pause_menu_button_position.left_2_rows_down": "Left: Row 3",
+  "config.minesweeper.pause_menu_button_position.left_3_rows_down": "Left: Row 4",
+  "config.minesweeper.pause_menu_button_position.left_4_rows_down": "Left: Row 5",
+  "config.minesweeper.pause_menu_button_position.right_same_row": "Right: Row 1",
+  "config.minesweeper.pause_menu_button_position.right_next_row": "Right: Row 2",
+  "config.minesweeper.pause_menu_button_position.right_2_rows_down": "Right: Row 3",
+  "config.minesweeper.pause_menu_button_position.right_3_rows_down": "Right: Row 4",
+  "config.minesweeper.pause_menu_button_position.right_4_rows_down": "Right: Row 5",
+
+  "gui.minesweeper.restart": "Restart",
+  "gui.minesweeper.wins": "Wins: %s",
+  "gui.done": "Done",
+  "gui.save": "Save",
+  "gui.minesweeper.status.playing": "Game in progress",
+  "gui.minesweeper.status.win": "Victory!",
+  "gui.minesweeper.status.lose": "Defeat."
 }

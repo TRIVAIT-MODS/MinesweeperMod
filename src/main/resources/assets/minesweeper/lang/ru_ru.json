@@ -1,9 +1,39 @@
 {
-  "key.minesweeper.open": "Открыть сапёр",
-  "category.minesweeper": "Minesweeper",
-  "gui.minesweeper.title": "Сапёр",
-  "button.minesweeper.close": "Готово",
-  "button.minesweeper.restart": "Рестарт",
-  "screen.minesweeper.wins": "Побед: %s"
+  "menu.minesweeper": "Сапёр",
 
+  "config.minesweeper.title": "Настройки Сапёра",
+  "config.minesweeper.width": "Ширина поля",
+  "config.minesweeper.height": "Высота поля",
+  "config.minesweeper.mines": "Количество мин",
+  "config.minesweeper.animations": "Анимации",
+  "config.minesweeper.button_position": "Кнопка в главном меню",
+  "config.minesweeper.pause_button_position": "Кнопка в меню паузы",
+
+  "config.minesweeper.main_menu_button_position.left_singleplayer": "Слева: Одиночная игра",
+  "config.minesweeper.main_menu_button_position.left_multiplayer": "Слева: Сетевая игра",
+  "config.minesweeper.main_menu_button_position.left_realms": "Слева: Realms",
+  "config.minesweeper.main_menu_button_position.left_mods": "Слева: Моды",
+  "config.minesweeper.main_menu_button_position.right_singleplayer": "Справа: Одиночная игра",
+  "config.minesweeper.main_menu_button_position.right_multiplayer": "Справа: Сетевая игра",
+  "config.minesweeper.main_menu_button_position.right_realms": "Справа: Realms",
+  "config.minesweeper.main_menu_button_position.right_mods": "Справа: Моды",
+
+  "config.minesweeper.pause_menu_button_position.left_same_row": "Слева: 1 ряд",
+  "config.minesweeper.pause_menu_button_position.left_next_row": "Слева: 2 ряд",
+  "config.minesweeper.pause_menu_button_position.left_2_rows_down": "Слева: 3 ряд",
+  "config.minesweeper.pause_menu_button_position.left_3_rows_down": "Слева: 4 ряд",
+  "config.minesweeper.pause_menu_button_position.left_4_rows_down": "Слева: 5 ряд",
+  "config.minesweeper.pause_menu_button_position.right_same_row": "Справа: 1 ряд",
+  "config.minesweeper.pause_menu_button_position.right_next_row": "Справа: 2 ряд",
+  "config.minesweeper.pause_menu_button_position.right_2_rows_down": "Справа: 3 ряд",
+  "config.minesweeper.pause_menu_button_position.right_3_rows_down": "Справа: 4 ряд",
+  "config.minesweeper.pause_menu_button_position.right_4_rows_down": "Справа: 5 ряд",
+
+  "gui.minesweeper.restart": "Рестарт",
+  "gui.minesweeper.wins": "Побед: %s",
+  "gui.done": "Готово",
+  "gui.save": "Сохранить",
+  "gui.minesweeper.status.playing": "Игра идёт",
+  "gui.minesweeper.status.win": "Победа!",
+  "gui.minesweeper.status.lose": "Поражение."
 }
