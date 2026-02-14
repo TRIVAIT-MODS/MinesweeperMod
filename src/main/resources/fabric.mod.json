@@ -11,13 +11,10 @@
 		"homepage": "https://modrinth.com/user/Trivait",
 		"sources": "https://github.com/TRIVAIT-MODS/MinesweeperMod"
 	},
-	"license": "CC0-1.0",
+	"license": "MIT",
 	"icon": "assets/minesweeper/icon.png",
-	"environment": "*",
+	"environment": "client",
 	"entrypoints": {
-		"main": [
-			"org.trivait.minesweeper.MineSweeperMod"
-		],
 		"modmenu": [
 			"org.trivait.minesweeper.modmenu.ModMenuIntegration"
 		],
