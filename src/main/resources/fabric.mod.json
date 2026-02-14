@@ -11,13 +11,10 @@
 		"homepage": "https://modrinth.com/user/Trivait",
 		"sources": "https://github.com/TRIVAIT-MODS/MinesweeperMod"
 	},
-	"license": "CC0-1.0",
+	"license": "MIT",
 	"icon": "assets/minesweeper/icon.png",
-	"environment": "*",
+	"environment": "client",
 	"entrypoints": {
-		"main": [
-			"org.trivait.minesweeper.MineSweeperMod"
-		],
 		"modmenu": [
 			"org.trivait.minesweeper.modmenu.ModMenuIntegration"
 		],
@@ -30,10 +27,10 @@
 	],
 	"depends": {
 		"fabricloader": ">=0.17.3",
-		"minecraft": "~1.21.9",
+		"minecraft": "~1.21.6",
 		"java": ">=21",
 		"fabric-api": "*",
-		"modmenu": ">=15.0.0"
+		"modmenu": ">=16.0.0"
 	},
 	"suggests": {
 		"another-mod": "*"
