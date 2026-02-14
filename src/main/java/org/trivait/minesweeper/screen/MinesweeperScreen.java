@@ -488,7 +488,7 @@ public class MinesweeperScreen extends Screen {
         int y = (int) Math.floor((mouseY - gridY) / (double) cellSize);
         if (x < 0 || x >= w || y < 0 || y >= h) return super.mouseClicked(click, doubled);
 
-        mc.getSoundManager().play(PositionedSoundInstance.master(
+        mc.getSoundManager().play(PositionedSoundInstance.ui(
                 SoundEvents.BLOCK_NOTE_BLOCK_HAT.value(), 0.20f, 1.0f));
 
         Cell c = grid[y][x];
@@ -515,7 +515,7 @@ public class MinesweeperScreen extends Screen {
             }
             if (!c.flagged && !c.revealed) {
                 if (!MinesweeperModClient.getConfig().enableAnimations) {
-                    mc.getSoundManager().play(PositionedSoundInstance.master(
+                    mc.getSoundManager().play(PositionedSoundInstance.ui(
                             SoundEvents.BLOCK_DEEPSLATE_BREAK, 0.25f, 1.0f));
                 }
                 startRevealWave(x, y);
@@ -550,7 +550,7 @@ public class MinesweeperScreen extends Screen {
         addActiveCell(y * w + x);
 
         if (anims) {
-            mc.getSoundManager().play(PositionedSoundInstance.master(
+            mc.getSoundManager().play(PositionedSoundInstance.ui(
                     SoundEvents.BLOCK_DEEPSLATE_BREAK, 0.25f, 1.0f));
         }
 
@@ -570,7 +570,8 @@ public class MinesweeperScreen extends Screen {
             start.revealed = true;
             alive = false;
             timerRunning = false;
-            mc.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.ENTITY_GENERIC_EXPLODE.value(), 0.7f, 1.0f));
+            mc.getSoundManager().play(PositionedSoundInstance.ui(SoundEvents.ENTITY_GENERIC_EXPLODE.value(), 0.7f, 1.0f));
+            mc.getSoundManager().play(PositionedSoundInstance.ui(SoundEvents.ENTITY_GENERIC_EXPLODE.value(), 0.7f, 1.0f));
             for (int yy = 0; yy < h; yy++) {
                 for (int xx = 0; xx < w; xx++) {
                     if (grid[yy][xx].mine) grid[yy][xx].revealed = true;
@@ -654,7 +655,7 @@ public class MinesweeperScreen extends Screen {
             }
         }
 
-        mc.getSoundManager().play(PositionedSoundInstance.master(
+        mc.getSoundManager().play(PositionedSoundInstance.ui(
                 SoundEvents.ENTITY_FIREWORK_ROCKET_BLAST, 0.8f, 1.0f));
         MinesweeperModClient.incrementWins();
         saveGameState();
