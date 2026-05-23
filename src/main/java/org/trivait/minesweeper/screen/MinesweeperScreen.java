@@ -1,20 +1,20 @@
 package org.trivait.minesweeper.screen;
 
 import com.mojang.blaze3d.pipeline.RenderPipeline;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gl.RenderPipelines;
-import net.minecraft.client.gui.Click;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.RenderLayers;
-import net.minecraft.client.sound.PositionedSoundInstance;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import org.trivait.minesweeper.MinesweeperModClient;
 import org.trivait.minesweeper.config.Config;
 
@@ -23,24 +23,24 @@ import java.util.function.Function;
 
 public class MinesweeperScreen extends Screen {
 
-    private static final Identifier TEX_FLAG = Identifier.of(MinesweeperModClient.MOD_ID, "textures/gui/flag.png");
-    private static final Identifier TEX_BARRIER = Identifier.ofVanilla("textures/item/barrier.png");
-    private static final Identifier TEX_TNT_SIDE = Identifier.ofVanilla("textures/block/tnt_side.png");
+    private static final Identifier TEX_FLAG = Identifier.fromNamespaceAndPath(MinesweeperModClient.MOD_ID, "textures/gui/flag.png");
+    private static final Identifier TEX_BARRIER = Identifier.withDefaultNamespace("textures/item/barrier.png");
+    private static final Identifier TEX_TNT_SIDE = Identifier.withDefaultNamespace("textures/block/tnt_side.png");
 
-    private static final Identifier TEX_SMILE_PLAYING = Identifier.of(MinesweeperModClient.MOD_ID, "textures/gui/smiley_playing.png");
-    private static final Identifier TEX_SMILE_WIN = Identifier.of(MinesweeperModClient.MOD_ID, "textures/gui/smiley_win.png");
-    private static final Identifier TEX_SMILE_LOSE = Identifier.of(MinesweeperModClient.MOD_ID, "textures/gui/smiley_lose.png");
-    private static final Identifier TEX_SMILE_HOVER = Identifier.of(MinesweeperModClient.MOD_ID, "textures/gui/smiley_hover.png");
-    private static final Text[] ADJ_TEXT = new Text[]{
-            Text.empty(),
-            Text.literal("1").styled(s -> s.withBold(true)),
-            Text.literal("2").styled(s -> s.withBold(true)),
-            Text.literal("3").styled(s -> s.withBold(true)),
-            Text.literal("4").styled(s -> s.withBold(true)),
-            Text.literal("5").styled(s -> s.withBold(true)),
-            Text.literal("6").styled(s -> s.withBold(true)),
-            Text.literal("7").styled(s -> s.withBold(true)),
-            Text.literal("8").styled(s -> s.withBold(true))
+    private static final Identifier TEX_SMILE_PLAYING = Identifier.fromNamespaceAndPath(MinesweeperModClient.MOD_ID, "textures/gui/smiley_playing.png");
+    private static final Identifier TEX_SMILE_WIN = Identifier.fromNamespaceAndPath(MinesweeperModClient.MOD_ID, "textures/gui/smiley_win.png");
+    private static final Identifier TEX_SMILE_LOSE = Identifier.fromNamespaceAndPath(MinesweeperModClient.MOD_ID, "textures/gui/smiley_lose.png");
+    private static final Identifier TEX_SMILE_HOVER = Identifier.fromNamespaceAndPath(MinesweeperModClient.MOD_ID, "textures/gui/smiley_hover.png");
+    private static final Component[] ADJ_TEXT = new Component[]{
+            Component.empty(),
+            Component.literal("1").withStyle(s -> s.withBold(true)),
+            Component.literal("2").withStyle(s -> s.withBold(true)),
+            Component.literal("3").withStyle(s -> s.withBold(true)),
+            Component.literal("4").withStyle(s -> s.withBold(true)),
+            Component.literal("5").withStyle(s -> s.withBold(true)),
+            Component.literal("6").withStyle(s -> s.withBold(true)),
+            Component.literal("7").withStyle(s -> s.withBold(true)),
+            Component.literal("8").withStyle(s -> s.withBold(true))
     };
 
     private static final RenderPipeline RENDER_PIPELINES = RenderPipelines.GUI_TEXTURED;
@@ -53,17 +53,17 @@ public class MinesweeperScreen extends Screen {
         boolean scheduled = false;
     }
 
-    private class SmileyButtonWidget extends ClickableWidget {
+    private class SmileyButtonWidget extends AbstractWidget {
         private final Runnable onPress;
         private boolean pressed = false;
 
         public SmileyButtonWidget(int x, int y, int width, int height, Runnable onPress) {
-            super(x, y, width, height, Text.empty());
+            super(x, y, width, height, Component.empty());
             this.onPress = onPress;
         }
 
         @Override
-        protected void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
+        protected void extractWidgetRenderState(GuiGraphicsExtractor context, int mouseX, int mouseY, float a) {
             int x = this.getX();
             int y = this.getY();
             int w = this.width;
@@ -97,18 +97,18 @@ public class MinesweeperScreen extends Screen {
             int iy = y + pad + (pressed ? 1 : 0);
             int iw = Math.max(1, w - pad * 2);
             int ih = Math.max(1, h - pad * 2);
-            context.drawTexture(RENDER_PIPELINES, tex, ix, iy, 0, 0, iw, ih, iw, ih);
+            context.blit(RENDER_PIPELINES, tex, ix, iy, 0, 0, iw, ih, iw, ih);
         }
 
         @Override
-        public void onClick(Click click, boolean doubled) {
+        public void onClick(MouseButtonEvent click, boolean doubled) {
             if (this.active) {
                 this.onPress.run();
             }
         }
 
         @Override
-        public boolean mouseClicked(Click click, boolean doubled) {
+        public boolean mouseClicked(MouseButtonEvent click, boolean doubled) {
             if (!this.active || click.button() != 0) return false;
             if (!this.isMouseOver(click.x(), click.y())) return false;
             this.pressed = true;
@@ -117,7 +117,7 @@ public class MinesweeperScreen extends Screen {
         }
 
         @Override
-        public boolean mouseReleased(Click click) {
+        public boolean mouseReleased(MouseButtonEvent click) {
             if (click.button() == 0) {
                 this.pressed = false;
             }
@@ -125,12 +125,12 @@ public class MinesweeperScreen extends Screen {
         }
 
         @Override
-        protected void appendClickableNarrations(NarrationMessageBuilder builder) {
+        protected void updateWidgetNarration(NarrationElementOutput builder) {
 
         }
     }
 
-    private final MinecraftClient mc = MinecraftClient.getInstance();
+    private final Minecraft mc = Minecraft.getInstance();
     private Cell[][] grid;
     private int w, h, mines;
 
@@ -153,7 +153,7 @@ public class MinesweeperScreen extends Screen {
     private int topBarX, topBarY, topBarW;
     private int topBarH = 28;
 
-    private ButtonWidget backBtn;
+    private Button backBtn;
     private SmileyButtonWidget smileyBtn;
 
     private final Random rng = new Random();
@@ -161,7 +161,7 @@ public class MinesweeperScreen extends Screen {
     private int[] activeCells = new int[256];
     private int activeCount = 0;
 
-    public MinesweeperScreen(Text title) {
+    public MinesweeperScreen(Component title) {
         super(title);
     }
 
@@ -323,15 +323,15 @@ public class MinesweeperScreen extends Screen {
             }
         }
 
-        this.clearChildren();
+        this.clearWidgets();
 
         int backW = 60;
         int backH = 20;
         int backX = 8;
         int backY = 8;
-        backBtn = ButtonWidget.builder(Text.translatable("gui.back"), b -> this.close())
-                .dimensions(backX, backY, backW, backH).build();
-        this.addDrawableChild(backBtn);
+        backBtn = Button.builder(Component.translatable("gui.back"), b -> this.onClose())
+                .bounds(backX, backY, backW, backH).build();
+        this.addRenderableWidget(backBtn);
 
         int smileSize = Math.max(18, Math.min(26, topBarH - 2));
         int smileX = this.width / 2 - (smileSize / 2);
@@ -340,13 +340,13 @@ public class MinesweeperScreen extends Screen {
             MinesweeperModClient.setSavedGame(null);
             MinesweeperScreen.this.init();
         });
-        this.addDrawableChild(smileyBtn);
+        this.addRenderableWidget(smileyBtn);
     }
 
     @Override
-    public void close() {
+    public void onClose() {
         saveGameState();
-        super.close();
+        super.onClose();
     }
 
     private void placeMinesAvoiding(int avoidX, int avoidY) {
@@ -380,7 +380,7 @@ public class MinesweeperScreen extends Screen {
         }
     }
 
-    private void drawTopBar(DrawContext context) {
+    private void drawTopBar(GuiGraphicsExtractor context) {
         int bg = 0xFF2B2B2B;
         int border = 0xFF555555;
 
@@ -423,7 +423,7 @@ public class MinesweeperScreen extends Screen {
         drawSevenSegNumber(context, topBarX + topBarW - padX - (digitW * 3 + 2 * 2), y, digitW, digitH, elapsedSeconds, 3);
     }
 
-    private void drawSevenSegNumber(DrawContext context, int x, int y, int digitW, int digitH, int value, int digits) {
+    private void drawSevenSegNumber(GuiGraphicsExtractor context, int x, int y, int digitW, int digitH, int value, int digits) {
         int v = Math.max(0, Math.min(999, value));
         int[] out = new int[digits];
         for (int i = digits - 1; i >= 0; i--) {
@@ -437,7 +437,7 @@ public class MinesweeperScreen extends Screen {
         }
     }
 
-    private void drawSevenSegDigit(DrawContext context, int x, int y, int w, int h, int d) {
+    private void drawSevenSegDigit(GuiGraphicsExtractor context, int x, int y, int w, int h, int d) {
         int on = 0xFFFF2D2D;
         int off = 0xFF3A0C0C;
         int bg = 0xFF121212;
@@ -465,12 +465,12 @@ public class MinesweeperScreen extends Screen {
         fillSeg(context, x + inset, midY - t / 2, x + w - inset, midY + t / 2, g ? on : off);
     }
 
-    private void fillSeg(DrawContext context, int x1, int y1, int x2, int y2, int color) {
+    private void fillSeg(GuiGraphicsExtractor context, int x1, int y1, int x2, int y2, int color) {
         context.fill(x1, y1, x2, y2, color);
     }
 
     @Override
-    public boolean mouseClicked(Click click, boolean doubled) {
+    public boolean mouseClicked(MouseButtonEvent click, boolean doubled) {
         double mouseX = click.x();
         double mouseY = click.y();
         int button = click.button();
@@ -488,8 +488,8 @@ public class MinesweeperScreen extends Screen {
         int y = (int) Math.floor((mouseY - gridY) / (double) cellSize);
         if (x < 0 || x >= w || y < 0 || y >= h) return super.mouseClicked(click, doubled);
 
-        mc.getSoundManager().play(PositionedSoundInstance.ui(
-                SoundEvents.BLOCK_NOTE_BLOCK_HAT.value(), 0.20f, 1.0f));
+        mc.getSoundManager().play(SimpleSoundInstance.forUI(
+                SoundEvents.NOTE_BLOCK_HAT.value(), 0.20f, 1.0f));
 
         Cell c = grid[y][x];
 
@@ -515,8 +515,8 @@ public class MinesweeperScreen extends Screen {
             }
             if (!c.flagged && !c.revealed) {
                 if (!MinesweeperModClient.getConfig().enableAnimations) {
-                    mc.getSoundManager().play(PositionedSoundInstance.ui(
-                            SoundEvents.BLOCK_DEEPSLATE_BREAK, 0.25f, 1.0f));
+                    mc.getSoundManager().play(SimpleSoundInstance.forUI(
+                            SoundEvents.DEEPSLATE_BREAK, 0.25f, 1.0f));
                 }
                 startRevealWave(x, y);
                 if (!alive) return true;
@@ -550,8 +550,8 @@ public class MinesweeperScreen extends Screen {
         addActiveCell(y * w + x);
 
         if (anims) {
-            mc.getSoundManager().play(PositionedSoundInstance.ui(
-                    SoundEvents.BLOCK_DEEPSLATE_BREAK, 0.25f, 1.0f));
+            mc.getSoundManager().play(SimpleSoundInstance.forUI(
+                    SoundEvents.DEEPSLATE_BREAK, 0.25f, 1.0f));
         }
 
         if (!c.mine) {
@@ -570,8 +570,8 @@ public class MinesweeperScreen extends Screen {
             start.revealed = true;
             alive = false;
             timerRunning = false;
-            mc.getSoundManager().play(PositionedSoundInstance.ui(SoundEvents.ENTITY_GENERIC_EXPLODE.value(), 0.7f, 1.0f));
-            mc.getSoundManager().play(PositionedSoundInstance.ui(SoundEvents.ENTITY_GENERIC_EXPLODE.value(), 0.7f, 1.0f));
+            mc.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.GENERIC_EXPLODE.value(), 0.7f, 1.0f));
+            mc.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.GENERIC_EXPLODE.value(), 0.7f, 1.0f));
             for (int yy = 0; yy < h; yy++) {
                 for (int xx = 0; xx < w; xx++) {
                     if (grid[yy][xx].mine) grid[yy][xx].revealed = true;
@@ -655,8 +655,8 @@ public class MinesweeperScreen extends Screen {
             }
         }
 
-        mc.getSoundManager().play(PositionedSoundInstance.ui(
-                SoundEvents.ENTITY_FIREWORK_ROCKET_BLAST, 0.8f, 1.0f));
+        mc.getSoundManager().play(SimpleSoundInstance.forUI(
+                SoundEvents.FIREWORK_ROCKET_BLAST, 0.8f, 1.0f));
         MinesweeperModClient.incrementWins();
         saveGameState();
     }
@@ -703,12 +703,12 @@ public class MinesweeperScreen extends Screen {
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        super.render(context, mouseX, mouseY, delta);
+    public void extractRenderState(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {
+        super.extractRenderState(context, mouseX, mouseY, delta);
 
         drawTopBar(context);
 
-        double scaleFactor = mc.getWindow().getScaleFactor();
+        double scaleFactor = mc.getWindow().getGuiScale();
         boolean anims = MinesweeperModClient.getConfig().enableAnimations;
         float uiScale = cellSize / 24f;
         float textScale = Math.max(0.70f, Math.min(1.30f, uiScale * 1.05f));
@@ -732,8 +732,8 @@ public class MinesweeperScreen extends Screen {
                 context.fill(x, y, x + cellSize, y + cellSize, bg);
 
                 if (isHighScale) {
-                    context.getMatrices().pushMatrix();
-                    context.getMatrices().scale(p, p);
+                    context.pose().pushMatrix();
+                    context.pose().scale(p, p);
                     int px1 = (int) Math.round(x * scaleFactor);
                     int py1 = (int) Math.round(y * scaleFactor);
                     int px2 = (int) Math.round((x + cellSize) * scaleFactor);
@@ -742,7 +742,7 @@ public class MinesweeperScreen extends Screen {
                     context.fill(px1, py2 - 1, px2, py2, border);
                     context.fill(px1, py1, px1 + 1, py2, border);
                     context.fill(px2 - 1, py1, px2, py2, border);
-                    context.getMatrices().popMatrix();
+                    context.pose().popMatrix();
                 } else {
                     context.fill(x, y, x + cellSize, y + 1, border);
                     context.fill(x, y + cellSize - 1, x + cellSize, y + cellSize, border);
@@ -762,30 +762,30 @@ public class MinesweeperScreen extends Screen {
                 int cx = x + cellSize / 2;
                 int cy = y + cellSize / 2;
 
-                context.getMatrices().pushMatrix();
-                context.getMatrices().translate((float) cx, (float) cy);
-                if (contentScale != 1.0f) context.getMatrices().scale(contentScale, contentScale);
-                context.getMatrices().translate((float) -cx, (float) -cy);
+                context.pose().pushMatrix();
+                context.pose().translate((float) cx, (float) cy);
+                if (contentScale != 1.0f) context.pose().scale(contentScale, contentScale);
+                context.pose().translate((float) -cx, (float) -cy);
 
                 if (c.revealed) {
                     if (c.mine && !won) {
                         int ox = cx - texSizeAdjust / 2, oy = cy - texSizeAdjust / 2;
-                        context.drawTexture(RENDER_PIPELINES, c.flagged && !alive ? TEX_FLAG : TEX_TNT_SIDE, ox, oy, 0, 0, texSizeAdjust, texSizeAdjust, texSizeAdjust, texSizeAdjust);
+                        context.blit(RENDER_PIPELINES, c.flagged && !alive ? TEX_FLAG : TEX_TNT_SIDE, ox, oy, 0, 0, texSizeAdjust, texSizeAdjust, texSizeAdjust, texSizeAdjust);
                     } else if (c.adjacent > 0) {
-                        Text numText = ADJ_TEXT[c.adjacent];
+                        Component numText = ADJ_TEXT[c.adjacent];
                         int color = getAdjColor(c.adjacent);
-                        context.getMatrices().pushMatrix();
-                        context.getMatrices().translate((float) cx, (float) cy);
-                        if (textScale != 1.0f) context.getMatrices().scale(textScale, textScale);
-                        context.getMatrices().translate(-mc.textRenderer.getWidth(numText) / 2f, -mc.textRenderer.fontHeight / 2f);
-                        context.drawText(mc.textRenderer, numText, 0, 0, color, false);
-                        context.getMatrices().popMatrix();
+                        context.pose().pushMatrix();
+                        context.pose().translate((float) cx, (float) cy);
+                        if (textScale != 1.0f) context.pose().scale(textScale, textScale);
+                        context.pose().translate(-mc.font.width(numText) / 2f, -mc.font.lineHeight / 2f);
+                        context.text(mc.font, numText, 0, 0, color, false);
+                        context.pose().popMatrix();
                     }
                 } else if (c.flagged) {
                     int ox = cx - texSizeAdjust / 2, oy = cy - texSizeAdjust / 2;
-                    context.drawTexture(RENDER_PIPELINES, !alive && !won && !c.mine ? TEX_BARRIER : TEX_FLAG, ox, oy, 0, 0, texSizeAdjust, texSizeAdjust, texSizeAdjust, texSizeAdjust);
+                    context.blit(RENDER_PIPELINES, !alive && !won && !c.mine ? TEX_BARRIER : TEX_FLAG, ox, oy, 0, 0, texSizeAdjust, texSizeAdjust, texSizeAdjust, texSizeAdjust);
                 }
-                context.getMatrices().popMatrix();
+                context.pose().popMatrix();
             }
         }
 
@@ -815,7 +815,7 @@ public class MinesweeperScreen extends Screen {
         return (a << 24) | (r << 16) | (g << 8) | b;
     }
     @Override
-    public boolean shouldPause() {
+    public boolean isPauseScreen() {
         return false;
     }
 

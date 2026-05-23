@@ -1,10 +1,10 @@
 package org.trivait.minesweeper.mixin;
 
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.TitleScreen;
-import net.minecraft.client.gui.widget.TextIconButtonWidget;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.TitleScreen;
+import net.minecraft.client.gui.components.SpriteIconButton;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -15,7 +15,7 @@ import org.trivait.minesweeper.screen.MinesweeperScreen;
 
 @Mixin(TitleScreen.class)
 public abstract class TitleScreenMixin extends Screen {
-    protected TitleScreenMixin(Text title) {
+    protected TitleScreenMixin(Component title) {
         super(title);
     }
 
@@ -25,16 +25,16 @@ public abstract class TitleScreenMixin extends Screen {
         if (cfg.mainMenuButtonPosition == null) {
             cfg.mainMenuButtonPosition = Config.MainMenuButtonPosition.RIGHT_MULTIPLAYER;
         }
-        TextIconButtonWidget minesweeperBtn = TextIconButtonWidget.builder(
-                Text.empty(),
-                (button) -> this.client.setScreen(new MinesweeperScreen(this.title)),
+        SpriteIconButton minesweeperBtn = SpriteIconButton.builder(
+                Component.empty(),
+                (button) -> this.minecraft.setScreen(new MinesweeperScreen(this.title)),
                 true
-        ).width(20).texture(Identifier.of("minesweeper", "icon/button"), 16, 16).build();
+        ).width(20).sprite(Identifier.fromNamespaceAndPath("minesweeper", "icon/button"), 16, 16).build();
 
         minesweeperBtn.setPosition(
                 cfg.mainMenuButtonPosition.getX(this.width),
                 cfg.mainMenuButtonPosition.getY(this.height)
         );
-        this.addDrawableChild(minesweeperBtn);
+        this.addRenderableWidget(minesweeperBtn);
     }
 }
