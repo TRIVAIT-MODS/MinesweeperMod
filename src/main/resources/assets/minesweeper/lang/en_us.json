@@ -1,13 +1,14 @@
 {
   "menu.minesweeper": "Minesweeper",
 
-  "config.minesweeper.title": "Minesweeper Settings",
-  "config.minesweeper.width": "Grid width",
-  "config.minesweeper.height": "Grid height",
-  "config.minesweeper.mines": "Mines count",
-  "config.minesweeper.animations": "Animations",
-  "config.minesweeper.button_position": "Main menu button position",
-  "config.minesweeper.pause_button_position": "Pause menu button position",
+  "text.autoconfig.minesweeper.title": "Minesweeper Settings",
+  "text.autoconfig.minesweeper.option.gridWidth": "Grid width",
+  "text.autoconfig.minesweeper.option.gridHeight": "Grid height",
+  "text.autoconfig.minesweeper.option.mines": "Mines count",
+  "text.autoconfig.minesweeper.option.enableAnimations": "Animations",
+  "text.autoconfig.minesweeper.option.mainMenuButtonPosition": "Main menu button position",
+  "text.autoconfig.minesweeper.option.pauseMenuButtonPosition": "Pause menu button position",
+  "text.autoconfig.minesweeper.option.enableExplosionAnimation": "Explosion animation",
 
   "config.minesweeper.main_menu_button_position.left_singleplayer": "Left: Singleplayer",
   "config.minesweeper.main_menu_button_position.left_multiplayer": "Left: Multiplayer",
@@ -29,11 +30,17 @@
   "config.minesweeper.pause_menu_button_position.right_3_rows_down": "Right: Row 4",
   "config.minesweeper.pause_menu_button_position.right_4_rows_down": "Right: Row 5",
 
-  "gui.minesweeper.restart": "Restart",
-  "gui.minesweeper.wins": "Wins: %s",
   "gui.done": "Done",
   "gui.save": "Save",
-  "gui.minesweeper.status.playing": "Game in progress",
-  "gui.minesweeper.status.win": "Victory!",
-  "gui.minesweeper.status.lose": "Defeat."
+
+  "leaderboard.refresh": "Refresh",
+  "leaderboard.submit": "Submit",
+  "leaderboard.mode.time": "Time",
+  "leaderboard.mode.score": "Score",
+  "leaderboard.category.all": "All",
+  "second.suffix": "s",
+  "leaderboard.name": "Leaderboard",
+  "leaderboard.loading": "Loading...",
+  "leaderboard.error": "Error:",
+  "leaderboard.play": "Play"
 }

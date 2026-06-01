@@ -1,13 +1,14 @@
 {
   "menu.minesweeper": "Сапёр",
 
-  "config.minesweeper.title": "Настройки Сапёра",
-  "config.minesweeper.width": "Ширина поля",
-  "config.minesweeper.height": "Высота поля",
-  "config.minesweeper.mines": "Количество мин",
-  "config.minesweeper.animations": "Анимации",
-  "config.minesweeper.button_position": "Кнопка в главном меню",
-  "config.minesweeper.pause_button_position": "Кнопка в меню паузы",
+  "text.autoconfig.minesweeper.title": "Настройки Сапёра",
+  "text.autoconfig.minesweeper.option.gridWidth": "Ширина поля",
+  "text.autoconfig.minesweeper.option.gridHeight": "Высота поля",
+  "text.autoconfig.minesweeper.option.mines": "Количество мин",
+  "text.autoconfig.minesweeper.option.enableAnimations": "Анимации",
+  "text.autoconfig.minesweeper.option.mainMenuButtonPosition": "Кнопка в главном меню",
+  "text.autoconfig.minesweeper.option.pauseMenuButtonPosition": "Кнопка в меню паузы",
+  "text.autoconfig.minesweeper.option.enableExplosionAnimation": "Анимация взрыва при поражении",
 
   "config.minesweeper.main_menu_button_position.left_singleplayer": "Слева: Одиночная игра",
   "config.minesweeper.main_menu_button_position.left_multiplayer": "Слева: Сетевая игра",
@@ -29,11 +30,17 @@
   "config.minesweeper.pause_menu_button_position.right_3_rows_down": "Справа: 4 ряд",
   "config.minesweeper.pause_menu_button_position.right_4_rows_down": "Справа: 5 ряд",
 
-  "gui.minesweeper.restart": "Рестарт",
-  "gui.minesweeper.wins": "Побед: %s",
   "gui.done": "Готово",
   "gui.save": "Сохранить",
-  "gui.minesweeper.status.playing": "Игра идёт",
-  "gui.minesweeper.status.win": "Победа!",
-  "gui.minesweeper.status.lose": "Поражение."
+
+  "leaderboard.refresh": "Обновить",
+  "leaderboard.submit": "Отправить",
+  "leaderboard.mode.time": "Время",
+  "leaderboard.mode.score": "Счет",
+  "leaderboard.category.all": "Все",
+  "second.suffix": "с",
+  "leaderboard.name": "Лидерборд",
+  "leaderboard.loading": "Загрузка...",
+  "leaderboard.error": "Ошибка:",
+  "leaderboard.play": "Играть"
 }
