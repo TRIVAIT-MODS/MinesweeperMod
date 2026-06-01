@@ -15,6 +15,9 @@
 	"icon": "assets/minesweeper/icon.png",
 	"environment": "client",
 	"entrypoints": {
+		"main": [
+			"org.trivait.minesweeper.MineSweeperMod"
+		],
 		"modmenu": [
 			"org.trivait.minesweeper.modmenu.ModMenuIntegration"
 		],
@@ -27,10 +30,11 @@
 	],
 	"depends": {
 		"fabricloader": ">=0.17.3",
-		"minecraft": "~1.21.4",
+		"minecraft": "~1.21.2",
 		"java": ">=21",
 		"fabric-api": "*",
-		"modmenu": ">=13.0.3"
+		"modmenu": ">=12.0.0",
+		"cloth-config2": ">=16.0.143"
 	},
 	"suggests": {
 		"another-mod": "*"
