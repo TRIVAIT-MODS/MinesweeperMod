@@ -12,23 +12,35 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.trivait.minesweeper.MinesweeperModClient;
 import org.trivait.minesweeper.config.Config;
+import org.trivait.minesweeper.config.GameMode;
+import org.trivait.minesweeper.config.PauseMenuButtonPosition;
+import org.trivait.minesweeper.game.GameSettings;
+import org.trivait.minesweeper.game.SavedGame;
 import org.trivait.minesweeper.screen.MinesweeperScreen;
 
 @Mixin(PauseScreen.class)
 public abstract class PauseScreenMixin extends Screen {
-    protected PauseScreenMixin(Component title) {
-        super(title);
+
+    public PauseScreenMixin() {
+        super(Component.empty());
     }
 
     @Inject(method = "createPauseMenu", at = @At("RETURN"))
     private void addMinesweeperButton(CallbackInfo ci) {
-        Config cfg = MinesweeperModClient.getConfig();
+        Config cfg = MinesweeperModClient.CONFIG;
         if (cfg.pauseMenuButtonPosition == null) {
-            cfg.pauseMenuButtonPosition = Config.PauseMenuButtonPosition.RIGHT_NEXT_ROW;
+            cfg.pauseMenuButtonPosition = PauseMenuButtonPosition.RIGHT_NEXT_ROW;
         }
         SpriteIconButton minesweeperBtn = SpriteIconButton.builder(
                 Component.empty(),
-                (button) -> this.minecraft.setScreen(new MinesweeperScreen(title)),
+                (button) -> {
+                    SavedGame saved = MinesweeperModClient.getSavedGame();
+                    if (saved != null) {
+                        this.minecraft.setScreen(new MinesweeperScreen(saved, cfg.enableAnimations, GameMode.DEFAULT));
+                    } else {
+                        this.minecraft.setScreen(new MinesweeperScreen(new GameSettings(cfg.gridWidth, cfg.gridHeight, cfg.mines), cfg.enableAnimations, GameMode.DEFAULT));
+                    }
+                },
                 true
         ).width(20).sprite(Identifier.fromNamespaceAndPath("minesweeper", "icon/button"), 16, 16).build();
 

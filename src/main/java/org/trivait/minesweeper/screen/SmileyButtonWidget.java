@@ -1,0 +1,81 @@
+package org.trivait.minesweeper.screen;
+
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import org.trivait.minesweeper.MinesweeperModClient;
+
+public class SmileyButtonWidget extends AbstractWidget {
+
+    private static final Identifier TEX_PLAYING = Identifier.fromNamespaceAndPath(MinesweeperModClient.MOD_ID, "textures/gui/smiley_playing.png");
+    private static final Identifier TEX_WIN     = Identifier.fromNamespaceAndPath(MinesweeperModClient.MOD_ID, "textures/gui/smiley_win.png");
+    private static final Identifier TEX_LOSE    = Identifier.fromNamespaceAndPath(MinesweeperModClient.MOD_ID, "textures/gui/smiley_lose.png");
+    private static final Identifier TEX_HOVER   = Identifier.fromNamespaceAndPath(MinesweeperModClient.MOD_ID, "textures/gui/smiley_hover.png");
+
+    public enum State { PLAYING, WIN, LOSE }
+
+    private final Runnable onPress;
+    private boolean pressed = false;
+    private State state = State.PLAYING;
+
+    public SmileyButtonWidget(int x, int y, int size, Runnable onPress) {
+        super(x, y, size, size, Component.empty());
+        this.onPress = onPress;
+    }
+
+    public void setState(State state) {
+        this.state = state;
+    }
+
+    @Override
+    protected void extractWidgetRenderState(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {
+        int x = getX(), y = getY(), w = width, h = height;
+        boolean hovered = isHovered();
+
+        int border = pressed ? 0xFF5E5E5E : (hovered ? 0xFFB5B5B5 : 0xFF7A7A7A);
+        int bg     = pressed ? 0xFF232323 : (hovered ? 0xFF3A3A3A : 0xFF2E2E2E);
+
+        context.fill(x - 1, y - 1, x + w + 1, y + h + 1, border);
+        context.fill(x, y, x + w, y + h, bg);
+
+        Identifier tex = hovered ? TEX_HOVER : switch (state) {
+            case WIN  -> TEX_WIN;
+            case LOSE -> TEX_LOSE;
+            default   -> TEX_PLAYING;
+        };
+
+        int pad = Math.max(1, Math.min(3, Math.min(w, h) / 10));
+        int offset = pressed ? 1 : 0;
+        int ix = x + pad + offset, iy = y + pad + offset;
+        int iw = Math.max(1, w - pad * 2), ih = Math.max(1, h - pad * 2);
+        context.blit(RenderPipelines.GUI_TEXTURED, tex, ix, iy, 0, 0, iw, ih, iw, ih);
+    }
+
+    @Override
+    public void onClick(MouseButtonEvent click, boolean doubled) {
+        if (active) onPress.run();
+    }
+
+    @Override
+    public boolean mouseClicked(MouseButtonEvent click, boolean doubled) {
+        if (!active || click.button() != 0 || !isMouseOver(click.x(), click.y())) return false;
+        pressed = true;
+        return super.mouseClicked(click, doubled);
+    }
+
+    @Override
+    public boolean mouseReleased(MouseButtonEvent click) {
+        if (click.button() == 0) pressed = false;
+        return super.mouseReleased(click);
+    }
+
+    @Override
+    protected void updateWidgetNarration(NarrationElementOutput output) {
+
+    }
+}

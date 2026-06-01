@@ -4,7 +4,7 @@
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
 		"TitleScreenMixin",
-		"PauseScreenMixin"
+      "PauseScreenMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
