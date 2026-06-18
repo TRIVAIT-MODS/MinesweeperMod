@@ -29,6 +29,6 @@ public class SelectLeaderboardScreen extends Screen {
     @Override
     public void onClose() {
         super.onClose();
-        this.minecraft.setScreen(parent);
+        this.minecraft.setScreenAndShow(parent);
     }
 }

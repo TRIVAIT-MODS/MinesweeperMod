@@ -125,7 +125,7 @@ public class MinesweeperScreen extends Screen {
         timerDisplay.setPosition(topBarX + topBarW - 6 - timerDisplay.getWidth(), dispY);
 
         leaderboardButton = Button.builder(Component.translatable("leaderboard.name").setStyle(Style.EMPTY.withBold(true).withColor(ChatFormatting.YELLOW)), (b) -> {
-            minecraft.setScreen(new SelectLeaderboardScreen(this));
+            minecraft.setScreenAndShow(new SelectLeaderboardScreen(this));
         }).bounds(5, height-20-5, 100, 20).build();
 
         if (gameMode == GameMode.DEFAULT) {

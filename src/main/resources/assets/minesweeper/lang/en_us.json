@@ -13,22 +13,22 @@
   "config.minesweeper.main_menu_button_position.left_singleplayer": "Left: Singleplayer",
   "config.minesweeper.main_menu_button_position.left_multiplayer": "Left: Multiplayer",
   "config.minesweeper.main_menu_button_position.left_realms": "Left: Realms",
-  "config.minesweeper.main_menu_button_position.left_mods": "Left: Mods",
+  "config.minesweeper.main_menu_button_position.left_settings": "Left: Settings",
   "config.minesweeper.main_menu_button_position.right_singleplayer": "Right: Singleplayer",
   "config.minesweeper.main_menu_button_position.right_multiplayer": "Right: Multiplayer",
   "config.minesweeper.main_menu_button_position.right_realms": "Right: Realms",
-  "config.minesweeper.main_menu_button_position.right_mods": "Right: Mods",
+  "config.minesweeper.main_menu_button_position.right_settings": "Right: Settings",
+  "config.minesweeper.main_menu_button_position.icons": "Icon Buttons Row",
 
   "config.minesweeper.pause_menu_button_position.left_same_row": "Left: Row 1",
   "config.minesweeper.pause_menu_button_position.left_next_row": "Left: Row 2",
   "config.minesweeper.pause_menu_button_position.left_2_rows_down": "Left: Row 3",
   "config.minesweeper.pause_menu_button_position.left_3_rows_down": "Left: Row 4",
-  "config.minesweeper.pause_menu_button_position.left_4_rows_down": "Left: Row 5",
   "config.minesweeper.pause_menu_button_position.right_same_row": "Right: Row 1",
   "config.minesweeper.pause_menu_button_position.right_next_row": "Right: Row 2",
   "config.minesweeper.pause_menu_button_position.right_2_rows_down": "Right: Row 3",
   "config.minesweeper.pause_menu_button_position.right_3_rows_down": "Right: Row 4",
-  "config.minesweeper.pause_menu_button_position.right_4_rows_down": "Right: Row 5",
+  "config.minesweeper.pause_menu_button_position.icons": "Icon Buttons Row",
 
   "gui.done": "Done",
   "gui.save": "Save",
@@ -42,5 +42,8 @@
   "leaderboard.name": "Leaderboard",
   "leaderboard.loading": "Loading...",
   "leaderboard.error": "Error:",
-  "leaderboard.play": "Play"
+  "leaderboard.play": "Play",
+
+  "modmenu.summaryTranslation.minesweeper": "This mod adds minesweeper in your game!",
+  "modmenu.descriptionTranslation.minesweeper": "This mod adds minesweeper in your game!"
 }

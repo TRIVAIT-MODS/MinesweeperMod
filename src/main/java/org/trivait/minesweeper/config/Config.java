@@ -18,8 +18,8 @@ public class Config implements ConfigData {
     public boolean enableExplosionAnimation = false;
 
     @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-    public MainMenuButtonPosition mainMenuButtonPosition = MainMenuButtonPosition.RIGHT_MULTIPLAYER;
+    public MainMenuButtonPosition mainMenuButtonPosition = MainMenuButtonPosition.ICONS;
 
     @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-    public PauseMenuButtonPosition pauseMenuButtonPosition = PauseMenuButtonPosition.RIGHT_NEXT_ROW;
+    public PauseMenuButtonPosition pauseMenuButtonPosition = PauseMenuButtonPosition.ICONS;
 }

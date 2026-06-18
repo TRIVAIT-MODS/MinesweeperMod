@@ -2,6 +2,9 @@
 	"required": true,
 	"package": "org.trivait.minesweeper.mixin",
 	"compatibilityLevel": "JAVA_21",
+	"mixinextras": {
+		"minVersion": "0.5.4"
+	},
 	"mixins": [
 		"TitleScreenMixin",
       "PauseScreenMixin"
