@@ -13,22 +13,22 @@
   "config.minesweeper.main_menu_button_position.left_singleplayer": "Слева: Одиночная игра",
   "config.minesweeper.main_menu_button_position.left_multiplayer": "Слева: Сетевая игра",
   "config.minesweeper.main_menu_button_position.left_realms": "Слева: Realms",
-  "config.minesweeper.main_menu_button_position.left_settings": "Слева: Настройки",
+  "config.minesweeper.main_menu_button_position.left_mods": "Слева: Моды",
   "config.minesweeper.main_menu_button_position.right_singleplayer": "Справа: Одиночная игра",
   "config.minesweeper.main_menu_button_position.right_multiplayer": "Справа: Сетевая игра",
   "config.minesweeper.main_menu_button_position.right_realms": "Справа: Realms",
-  "config.minesweeper.main_menu_button_position.right_settings": "Справа: Настройки",
-  "config.minesweeper.main_menu_button_position.icons": "Ряд кнопок-иконок",
+  "config.minesweeper.main_menu_button_position.right_mods": "Справа: Моды",
 
   "config.minesweeper.pause_menu_button_position.left_same_row": "Слева: 1 ряд",
   "config.minesweeper.pause_menu_button_position.left_next_row": "Слева: 2 ряд",
   "config.minesweeper.pause_menu_button_position.left_2_rows_down": "Слева: 3 ряд",
   "config.minesweeper.pause_menu_button_position.left_3_rows_down": "Слева: 4 ряд",
+  "config.minesweeper.pause_menu_button_position.left_4_rows_down": "Слева: 5 ряд",
   "config.minesweeper.pause_menu_button_position.right_same_row": "Справа: 1 ряд",
   "config.minesweeper.pause_menu_button_position.right_next_row": "Справа: 2 ряд",
   "config.minesweeper.pause_menu_button_position.right_2_rows_down": "Справа: 3 ряд",
   "config.minesweeper.pause_menu_button_position.right_3_rows_down": "Справа: 4 ряд",
-  "config.minesweeper.pause_menu_button_position.icons": "Ряд кнопок-иконок",
+  "config.minesweeper.pause_menu_button_position.right_4_rows_down": "Справа: 5 ряд",
 
   "gui.done": "Готово",
   "gui.save": "Сохранить",
@@ -43,6 +43,11 @@
   "leaderboard.loading": "Загрузка...",
   "leaderboard.error": "Ошибка:",
   "leaderboard.play": "Играть",
+  "leaderboard.mines": "Мин: ",
+
+  "scoreboard.version.script": "Версия скрипта: %s",
+  "scoreboard.version.api": "Версия API: %s",
+  "scoreboard.version.update_mod": "Нужно обновить мод!",
 
   "modmenu.summaryTranslation.minesweeper": "Добавляет сапёр в майнкрафт!",
   "modmenu.descriptionTranslation.minesweeper": "Добавляет сапёр в майнкрафт!"

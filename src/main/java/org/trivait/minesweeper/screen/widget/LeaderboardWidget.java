@@ -1,10 +1,9 @@
-package org.trivait.minesweeper.screen;
+package org.trivait.minesweeper.screen.widget;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Component;
 import org.trivait.minesweeper.config.GameMode;
 import org.trivait.minesweeper.leaderboard.BoardCategory;
@@ -117,7 +116,7 @@ public class LeaderboardWidget extends AbstractWidget {
             float ratio = (float) visibleRows / entries.size();
             int thumbH = Math.max(8, (int) (listH * ratio));
             int thumbY = listY + (int) ((listH - thumbH) * ((float) scrollOffset / maxScroll));
-            ctx.fill(sbX, listY, sbX + 2, listY + listH, 0xFF333333);
+            ctx.fill(sbX, listY, sbX + 2, listY + listH-1, 0xFF333333);
             ctx.fill(sbX, thumbY, sbX + 2, thumbY + thumbH, 0xFF888888);
         }
     }

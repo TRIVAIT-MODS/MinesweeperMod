@@ -6,7 +6,6 @@ import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.network.chat.Style;
@@ -19,6 +18,9 @@ import org.trivait.minesweeper.game.Cell;
 import org.trivait.minesweeper.game.GameBoard;
 import org.trivait.minesweeper.game.GameSettings;
 import org.trivait.minesweeper.game.SavedGame;
+import org.trivait.minesweeper.screen.widget.DigitDisplayWidget;
+import org.trivait.minesweeper.screen.widget.ExplosionAnimation;
+import org.trivait.minesweeper.screen.widget.SmileyButtonWidget;
 
 import java.util.ArrayList;
 import java.util.List;

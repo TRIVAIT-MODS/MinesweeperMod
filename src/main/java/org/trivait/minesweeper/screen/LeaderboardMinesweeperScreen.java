@@ -130,9 +130,9 @@ public class LeaderboardMinesweeperScreen extends MinesweeperScreen {
         Config cfg = MinesweeperModClient.CONFIG;
         SavedGame saved = MinesweeperModClient.getSavedGame();
         if (saved != null) {
-            this.minecraft.setScreenAndShow(new MinesweeperScreen(saved, cfg.enableAnimations, GameMode.DEFAULT));
+            this.minecraft.gui.setScreen(new MinesweeperScreen(saved, cfg.enableAnimations, GameMode.DEFAULT));
         } else {
-            this.minecraft.setScreenAndShow(new MinesweeperScreen(new GameSettings(cfg.gridWidth, cfg.gridHeight, cfg.mines), cfg.enableAnimations, GameMode.DEFAULT));
+            this.minecraft.gui.setScreen(new MinesweeperScreen(new GameSettings(cfg.gridWidth, cfg.gridHeight, cfg.mines), cfg.enableAnimations, GameMode.DEFAULT));
         }
     }
 }

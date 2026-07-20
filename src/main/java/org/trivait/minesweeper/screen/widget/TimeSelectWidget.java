@@ -1,4 +1,4 @@
-package org.trivait.minesweeper.screen;
+package org.trivait.minesweeper.screen.widget;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -7,24 +7,24 @@ import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.renderer.rendertype.RenderType;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import org.joml.Matrix3x2fStack;
 import org.trivait.minesweeper.MineSweeperMod;
+import org.trivait.minesweeper.screen.TimeLeaderboardScreen;
 
-public class ScoreSelectWidget extends AbstractWidget {
+public class TimeSelectWidget extends AbstractWidget {
     private float scale = 1.0f;
     private float targetScale = 1.0f;
     private final float speed = 0.30f;
 
     private final Screen parent;
 
-    public ScoreSelectWidget(int x, int y, int width, int height, Screen parent) {
+    public TimeSelectWidget(int x, int y, int width, int height, Screen parent) {
         super(x, y, width, height, Component.empty());
         this.parent = parent;
     }
+
 
     @Override
     protected void extractWidgetRenderState(GuiGraphicsExtractor ctx, int mouseX, int mouseY, float delta) {
@@ -51,10 +51,10 @@ public class ScoreSelectWidget extends AbstractWidget {
         ctx.fill(getX(), getY(), getX()+2, getY()+height-2, -2);
         ctx.fill(getX()+width, getY(), getX()+width-2, getY()+height-2, -1);
 
-        ctx.blit(RenderPipelines.GUI_TEXTURED, Identifier.fromNamespaceAndPath(MineSweeperMod.MOD_ID, "textures/gui/score.png"), getX() + 1, getY() + 1, 0, 0, width - 2, height - 2, width - 2, height - 2);
+        ctx.blit(RenderPipelines.GUI_TEXTURED, Identifier.fromNamespaceAndPath(MineSweeperMod.MOD_ID, "textures/gui/time.png"), getX() + 1, getY() + 1, 0, 0, width - 2, height - 2, width - 2, height - 2);
 
         var mc = net.minecraft.client.Minecraft.getInstance();
-        Component label = net.minecraft.network.chat.Component.translatable("leaderboard.mode.score").withStyle(s -> s.withBold(true));
+        Component label = net.minecraft.network.chat.Component.translatable("leaderboard.mode.time").withStyle(s -> s.withBold(true));
         int tw = mc.font.width(label) * 2;
         int tx = getX() + (width - tw) / 2;
         int ty = getY() + height - mc.font.lineHeight * 2 - 8;
@@ -69,7 +69,7 @@ public class ScoreSelectWidget extends AbstractWidget {
 
     @Override
     public boolean mouseClicked(MouseButtonEvent click, boolean doubled) {
-        Minecraft.getInstance().setScreenAndShow(new ScoreLeaderboardScreen(parent));
+        Minecraft.getInstance().setScreenAndShow(new TimeLeaderboardScreen(this.parent));
 
         return super.mouseClicked(click, doubled);
     }
