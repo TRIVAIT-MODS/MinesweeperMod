@@ -15,11 +15,14 @@ import java.util.concurrent.CompletableFuture;
 
 public class SheetsApi {
 
+    public static final String SCOREBOARD_API_VERSION = "1.0";
+
     private static final String SPREADSHEET_ID = "1MontuwLcsr7T9EygHmWJ1ziVLi7oAywvdNOb6bmj7KM";
     private static final String CSV_BASE =
             "https://docs.google.com/spreadsheets/d/" + SPREADSHEET_ID + "/gviz/tq?tqx=out:csv&sheet=";
 
     private static String writeWebAppUrl = LeaderboardLink.link;
+    private static String scriptVersion = null;
 
     private static final HttpClient HTTP = HttpClient.newBuilder()
             .connectTimeout(Duration.ofSeconds(5))
@@ -30,6 +33,14 @@ public class SheetsApi {
 
     public static void setWriteUrl(String url) { writeWebAppUrl = url; }
     public static boolean canWrite() { return writeWebAppUrl != null && !writeWebAppUrl.isBlank(); }
+    public static String getScriptVersion() { return scriptVersion; }
+    public static boolean isVersionMismatch() {
+        if (scriptVersion == null) return false;
+        String[] apiParts = SCOREBOARD_API_VERSION.split("\\.");
+        String[] scriptParts = scriptVersion.split("\\.");
+        if (apiParts.length == 0 || scriptParts.length == 0) return false;
+        return !apiParts[0].equals(scriptParts[0]);
+    }
     public static String sheetName(GameMode mode) {
         return switch (mode) {
             case LEADERBOARD_TIME      -> "Time";
@@ -62,13 +73,39 @@ public class SheetsApi {
         return CompletableFuture.runAsync(() -> submit(mode, name, value, category));
     }
 
-    public static CompletableFuture<Void> submitTimeAsync(String name, int seconds, BoardCategory category) {
-        return submitAsync(GameMode.LEADERBOARD_TIME, name, String.valueOf(seconds), category);
+    public static CompletableFuture<Void> submitTimeAsync(String name, double seconds, BoardCategory category) {
+        String value = String.format(java.util.Locale.US, "%.2f", seconds);
+        return submitAsync(GameMode.LEADERBOARD_TIME, name, value, category);
     }
 
 
     public static CompletableFuture<Void> submitScoreAsync(String name, int wins, BoardCategory category) {
         return submitAsync(GameMode.LEADERBOARD_WIN_COUNT, name, String.valueOf(wins), category);
+    }
+
+    public static CompletableFuture<Void> fetchScriptVersionAsync() {
+        return CompletableFuture.runAsync(() -> {
+            if (!canWrite()) return;
+            try {
+                String url = writeWebAppUrl + "?action=version";
+                for (int redirects = 0; redirects < 5; redirects++) {
+                    HttpRequest req = HttpRequest.newBuilder(URI.create(url))
+                            .GET().timeout(Duration.ofSeconds(5)).build();
+                    HttpResponse<String> resp = HTTP.send(req, HttpResponse.BodyHandlers.ofString());
+                    int status = resp.statusCode();
+                    if (status == 301 || status == 302 || status == 303 || status == 307 || status == 308) {
+                        url = resp.headers().firstValue("location")
+                                .orElseThrow(() -> new RuntimeException("Redirect with no Location header"));
+                    } else {
+                        JsonObject json = GSON.fromJson(resp.body(), JsonObject.class);
+                        scriptVersion = json.has("version") ? json.get("version").getAsString() : null;
+                        return;
+                    }
+                }
+            } catch (Exception e) {
+                scriptVersion = null;
+            }
+        });
     }
 
     public static void submit(GameMode mode, String name, String value, BoardCategory category) {
@@ -80,6 +117,7 @@ public class SheetsApi {
         body.addProperty("name", name);
         body.addProperty("value", value);
         body.addProperty("category", category.label);
+        body.addProperty("apiVersion", SCOREBOARD_API_VERSION);
         String json = GSON.toJson(body);
 
         try {
@@ -135,9 +173,12 @@ public class SheetsApi {
         for (var entry : agg.entrySet()) {
             String[] m = meta.get(entry.getKey());
             double v = entry.getValue()[0];
-            String display = mode == GameMode.LEADERBOARD_TIME
-                ? String.valueOf((int) v)
-                : String.valueOf((int) v);
+            String display;
+            if (mode == GameMode.LEADERBOARD_TIME) {
+                display = String.format("%.2f", v);
+            } else {
+                display = String.valueOf((int) v);
+            }
             result.add(new LeaderboardEntry(m[0], display, m[1], v));
         }
 
