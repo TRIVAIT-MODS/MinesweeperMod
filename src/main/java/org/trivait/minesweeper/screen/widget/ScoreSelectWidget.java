@@ -1,4 +1,4 @@
-package org.trivait.minesweeper.screen;
+package org.trivait.minesweeper.screen.widget;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -7,12 +7,11 @@ import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.renderer.rendertype.RenderType;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import org.joml.Matrix3x2fStack;
 import org.trivait.minesweeper.MineSweeperMod;
+import org.trivait.minesweeper.screen.ScoreLeaderboardScreen;
 
 public class ScoreSelectWidget extends AbstractWidget {
     private float scale = 1.0f;

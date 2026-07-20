@@ -1,13 +1,19 @@
 package org.trivait.minesweeper.screen;
 
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
+import org.lwjgl.glfw.GLFW;
 import org.trivait.minesweeper.MinesweeperModClient;
 import org.trivait.minesweeper.config.GameMode;
 import org.trivait.minesweeper.leaderboard.BoardCategory;
 import org.trivait.minesweeper.leaderboard.LeaderboardCache;
+import org.trivait.minesweeper.leaderboard.SheetsApi;
+import org.trivait.minesweeper.screen.widget.LeaderboardWidget;
+import org.trivait.minesweeper.screen.widget.ScoreboardVersionWidget;
 
 public class TimeLeaderboardScreen extends Screen {
     private final Screen parent;
@@ -22,14 +28,18 @@ public class TimeLeaderboardScreen extends Screen {
 
     private Button playButton;
 
+    private ScoreboardVersionWidget versionWidget;
+
     public TimeLeaderboardScreen(Screen parent) {
         super(Component.empty());
         this.parent = parent;
+        SheetsApi.fetchScriptVersionAsync();
     }
 
     @Override
     protected void init() {
         this.leaderboard = new LeaderboardWidget(10, 10, width/2+125, height-20, CACHE, GameMode.LEADERBOARD_TIME, boardCategory);
+        this.versionWidget = new ScoreboardVersionWidget(width-5-26, 5);
 
         this.c8x8Button = Button.builder(Component.literal("8x8"), b -> {
             boardCategory = BoardCategory.S8x8;
@@ -37,7 +47,7 @@ public class TimeLeaderboardScreen extends Screen {
             b.active = false;
             c16x16Button.active = true;
             c26x18Button.active = true;
-        }).bounds(width/2+((width/2-15)/2), height/2-10-10-20-20, 100, 20).build();
+        }).tooltip(Tooltip.create(Component.translatable("leaderboard.mines").append(Component.literal("" + BoardCategory.S8x8.mines)))).bounds(width/2+125+(((width/2-125)-100)/2), height/2-10-10-20-20, 100, 20).build();
         this.addRenderableWidget(c8x8Button);
 
         c8x8Button.active=false;
@@ -48,7 +58,7 @@ public class TimeLeaderboardScreen extends Screen {
             b.active = false;
             c8x8Button.active = true;
             c26x18Button.active = true;
-        }).bounds(width/2+((width/2-15)/2), height/2-10-20, 100, 20).build();
+        }).tooltip(Tooltip.create(Component.translatable("leaderboard.mines").append(Component.literal("" + BoardCategory.S16x16.mines)))).bounds(width/2+125+(((width/2-125)-100)/2), height/2-10-20, 100, 20).build();
         this.addRenderableWidget(c16x16Button);
 
         this.c26x18Button = Button.builder(Component.literal("26x18"), b -> {
@@ -57,30 +67,30 @@ public class TimeLeaderboardScreen extends Screen {
             b.active = false;
             c16x16Button.active = true;
             c8x8Button.active = true;
-        }).bounds(width/2+((width/2-15)/2), height/2, 100, 20).build();
+        }).tooltip(Tooltip.create(Component.translatable("leaderboard.mines").append(Component.literal("" + BoardCategory.S26x18.mines)))).bounds(width/2+125+(((width/2-125)-100)/2), height/2, 100, 20).build();
         this.addRenderableWidget(c26x18Button);
 
-        this.playButton = Button.builder(Component.translatable("leaderboard.play"), button -> {
+        this.playButton = Button.builder(Component.translatable("leaderboard.play").setStyle(Style.EMPTY.withBold(true)), button -> {
             minecraft.setScreen(new LeaderboardMinesweeperScreen(
                     boardCategory.toGameSettings(),
                     MinesweeperModClient.CONFIG.enableAnimations,
                     GameMode.LEADERBOARD_TIME,
                     boardCategory
             ));
-        }).bounds(width/2+((width/2-15)/2), height/2+30, 100, 20).build();
+        }).bounds(width/2+125+(((width/2-125)-100)/2)-2, height/2+30-2, 104, 24).build();
         this.addRenderableWidget(playButton);
 
         this.addRenderableWidget(leaderboard);
+        this.addRenderableWidget(versionWidget);
         refresh();
     }
 
     @Override
-    public boolean keyPressed(KeyEvent input) {
-        if (input.key() == 294) {
+    public boolean keyPressed(KeyEvent event) {
+        if (event.key() == GLFW.GLFW_KEY_F5) {
             refresh();
         }
-
-        return super.keyPressed(input);
+        return super.keyPressed(event);
     }
 
     private void refresh() {
