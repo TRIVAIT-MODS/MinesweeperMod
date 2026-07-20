@@ -42,5 +42,13 @@
   "leaderboard.name": "Leaderboard",
   "leaderboard.loading": "Loading...",
   "leaderboard.error": "Error:",
-  "leaderboard.play": "Play"
+  "leaderboard.play": "Play",
+  "leaderboard.mines": "Mines: ",
+
+  "scoreboard.version.script": "Scoreboard version: %s",
+  "scoreboard.version.api": "Mod api version: %s",
+  "scoreboard.version.update_mod": "Update the mod!",
+
+  "modmenu.summaryTranslation.minesweeper": "This mod adds minesweeper in your game!",
+  "modmenu.descriptionTranslation.minesweeper": "This mod adds minesweeper in your game!"
 }

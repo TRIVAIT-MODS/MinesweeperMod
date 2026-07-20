@@ -2,6 +2,8 @@ package org.trivait.minesweeper.screen;
 
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
+import org.trivait.minesweeper.screen.widget.ScoreSelectWidget;
+import org.trivait.minesweeper.screen.widget.TimeSelectWidget;
 
 public class SelectLeaderboardScreen extends Screen {
     private final Screen parent;

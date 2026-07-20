@@ -5,19 +5,22 @@ import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
+import org.joml.Matrix3x2fStack;
 import org.trivait.minesweeper.MinesweeperModClient;
 import org.trivait.minesweeper.config.GameMode;
 import org.trivait.minesweeper.game.Cell;
 import org.trivait.minesweeper.game.GameBoard;
 import org.trivait.minesweeper.game.GameSettings;
 import org.trivait.minesweeper.game.SavedGame;
+import org.trivait.minesweeper.screen.widget.DigitDisplayWidget;
+import org.trivait.minesweeper.screen.widget.ExplosionAnimation;
+import org.trivait.minesweeper.screen.widget.SmileyButtonWidget;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -267,6 +270,8 @@ public class MinesweeperScreen extends Screen {
     }
 
     private void drawGrid(DrawContext context, int mouseX, int mouseY) {
+        Matrix3x2fStack matrices = context.getMatrices();
+
         double scaleFactor = mc.getWindow().getScaleFactor();
         float uiScale = cellSize / 24f;
         float textScale = Math.max(0.70f, Math.min(1.30f, uiScale * 1.05f));
@@ -295,25 +300,25 @@ public class MinesweeperScreen extends Screen {
                     cellScale = 1.0f + t * 0.15f;
                 }
 
-                context.getMatrices().pushMatrix();
+                matrices.pushMatrix();
                 if (cellScale != 1.0f) {
-                    context.getMatrices().translate(cx, cy);
-                    context.getMatrices().scale(cellScale, cellScale);
-                    context.getMatrices().translate(-cx, -cy);
+                    matrices.translate(cx, cy);
+                    matrices.scale(cellScale, cellScale);
+                    matrices.translate(-cx, -cy);
                 }
 
                 context.fill(cx - half, cy - half, cx + half, cy + half, bg);
 
                 if (highScale) {
-                    context.getMatrices().pushMatrix();
-                    context.getMatrices().scale(invScale, invScale);
+                    matrices.pushMatrix();
+                    matrices.scale(invScale, invScale);
                     int px1 = (int) Math.round(x * scaleFactor), py1 = (int) Math.round(y * scaleFactor);
                     int px2 = (int) Math.round((x + cellSize) * scaleFactor), py2 = (int) Math.round((y + cellSize) * scaleFactor);
                     context.fill(px1, py1, px2, py1 + 1, border);
                     context.fill(px1, py2 - 1, px2, py2, border);
                     context.fill(px1, py1, px1 + 1, py2, border);
                     context.fill(px2 - 1, py1, px2, py2, border);
-                    context.getMatrices().popMatrix();
+                    matrices.popMatrix();
                 } else {
                     context.fill(x, y, x + cellSize, y + 1, border);
                     context.fill(x, y + cellSize - 1, x + cellSize, y + cellSize, border);
@@ -325,12 +330,14 @@ public class MinesweeperScreen extends Screen {
                     drawCellContent(context, c, cx, cy, texSize, textScale);
                 }
 
-                context.getMatrices().popMatrix();
+                matrices.popMatrix();
             }
         }
     }
 
     private void drawCellContent(DrawContext context, Cell c, int cx, int cy, int texSize, float textScale) {
+        Matrix3x2fStack matrices = context.getMatrices();
+
         if (c.revealed) {
             if (c.mine && !board.won) {
                 Identifier tex = (c.flagged && !board.alive) ? TEX_FLAG : TEX_TNT_SIDE;
@@ -338,14 +345,14 @@ public class MinesweeperScreen extends Screen {
             } else if (c.adjacent > 0) {
                 Text numText = ADJ_TEXT[c.adjacent];
                 int color = getAdjColor(c.adjacent);
-                context.getMatrices().pushMatrix();
-                context.getMatrices().translate(cx, cy);
-                if (textScale != 1.0f) context.getMatrices().scale(textScale, textScale);
-                context.getMatrices().translate(
+                matrices.pushMatrix();
+                matrices.translate(cx, cy);
+                if (textScale != 1.0f) matrices.scale(textScale, textScale);
+                matrices.translate(
                     -mc.textRenderer.getWidth(numText) / 2f,
                     -mc.textRenderer.fontHeight / 2f);
                 context.drawText(mc.textRenderer, numText, 0, 0, color, false);
-                context.getMatrices().popMatrix();
+                matrices.popMatrix();
             }
         } else if (c.flagged) {
             Identifier tex = (!board.alive && !board.won && !c.mine) ? TEX_BARRIER : TEX_FLAG;

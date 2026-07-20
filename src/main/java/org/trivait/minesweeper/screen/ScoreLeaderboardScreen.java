@@ -1,12 +1,17 @@
 package org.trivait.minesweeper.screen;
 
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import org.trivait.minesweeper.MinesweeperModClient;
 import org.trivait.minesweeper.config.GameMode;
 import org.trivait.minesweeper.leaderboard.BoardCategory;
 import org.trivait.minesweeper.leaderboard.LeaderboardCache;
+import org.trivait.minesweeper.leaderboard.SheetsApi;
+import org.trivait.minesweeper.screen.widget.LeaderboardWidget;
+import org.trivait.minesweeper.screen.widget.ScoreboardVersionWidget;
 
 public class ScoreLeaderboardScreen extends Screen {
     private final Screen parent;
@@ -21,14 +26,18 @@ public class ScoreLeaderboardScreen extends Screen {
 
     private ButtonWidget playButton;
 
+    private ScoreboardVersionWidget versionWidget;
+
     public ScoreLeaderboardScreen(Screen parent) {
         super(Text.empty());
         this.parent = parent;
+        SheetsApi.fetchScriptVersionAsync();
     }
 
     @Override
     protected void init() {
         this.leaderboard = new LeaderboardWidget(10, 10, width/2+125, height-20, CACHE, GameMode.LEADERBOARD_WIN_COUNT, boardCategory);
+        this.versionWidget = new ScoreboardVersionWidget(width-5-26, 5);
 
         this.c8x8Button = ButtonWidget.builder(Text.literal("8x8"), b -> {
             boardCategory = BoardCategory.S8x8;
@@ -36,7 +45,7 @@ public class ScoreLeaderboardScreen extends Screen {
             b.active = false;
             c16x16Button.active = true;
             c26x18Button.active = true;
-        }).dimensions(width/2+((width/2-15)/2), height/2-10-10-20-20, 100, 20).build();
+        }).tooltip(Tooltip.of(Text.translatable("leaderboard.mines").append(Text.literal("" + BoardCategory.S8x8.mines)))).dimensions(width/2+125+(((width/2-125)-100)/2), height/2-10-10-20-20, 100, 20).build();
         this.addDrawableChild(c8x8Button);
 
         c8x8Button.active=false;
@@ -47,7 +56,7 @@ public class ScoreLeaderboardScreen extends Screen {
             b.active = false;
             c8x8Button.active = true;
             c26x18Button.active = true;
-        }).dimensions(width/2+((width/2-15)/2), height/2-10-20, 100, 20).build();
+        }).tooltip(Tooltip.of(Text.translatable("leaderboard.mines").append(Text.literal("" + BoardCategory.S16x16.mines)))).dimensions(width/2+125+(((width/2-125)-100)/2), height/2-10-20, 100, 20).build();
         this.addDrawableChild(c16x16Button);
 
         this.c26x18Button = ButtonWidget.builder(Text.literal("26x18"), b -> {
@@ -56,20 +65,21 @@ public class ScoreLeaderboardScreen extends Screen {
             b.active = false;
             c16x16Button.active = true;
             c8x8Button.active = true;
-        }).dimensions(width/2+((width/2-15)/2), height/2, 100, 20).build();
+        }).tooltip(Tooltip.of(Text.translatable("leaderboard.mines").append(Text.literal("" + BoardCategory.S26x18.mines)))).dimensions(width/2+125+(((width/2-125)-100)/2), height/2, 100, 20).build();
         this.addDrawableChild(c26x18Button);
 
-        this.playButton = ButtonWidget.builder(Text.translatable("leaderboard.play"), button -> {
+        this.playButton = ButtonWidget.builder(Text.translatable("leaderboard.play").setStyle(Style.EMPTY.withBold(true)), button -> {
             client.setScreen(new LeaderboardMinesweeperScreen(
                     boardCategory.toGameSettings(),
                     MinesweeperModClient.CONFIG.enableAnimations,
                     GameMode.LEADERBOARD_WIN_COUNT,
                     boardCategory
             ));
-        }).dimensions(width/2+((width/2-15)/2), height/2+30, 100, 20).build();
+        }).dimensions(width/2+125+(((width/2-125)-100)/2)-2, height/2+30-2, 104, 24).build();
         this.addDrawableChild(playButton);
 
         this.addDrawableChild(leaderboard);
+        this.addDrawableChild(versionWidget);
         refresh();
     }
 
