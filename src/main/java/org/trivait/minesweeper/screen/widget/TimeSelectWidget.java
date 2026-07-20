@@ -1,4 +1,4 @@
-package org.trivait.minesweeper.screen;
+package org.trivait.minesweeper.screen.widget;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
@@ -10,6 +10,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.trivait.minesweeper.MineSweeperMod;
+import org.trivait.minesweeper.screen.TimeLeaderboardScreen;
 
 public class TimeSelectWidget extends ClickableWidget {
     private float scale = 1.0f;

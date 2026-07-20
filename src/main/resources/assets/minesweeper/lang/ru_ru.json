@@ -42,5 +42,13 @@
   "leaderboard.name": "Лидерборд",
   "leaderboard.loading": "Загрузка...",
   "leaderboard.error": "Ошибка:",
-  "leaderboard.play": "Играть"
+  "leaderboard.play": "Играть",
+  "leaderboard.mines": "Мин: ",
+
+  "scoreboard.version.script": "Версия скрипта: %s",
+  "scoreboard.version.api": "Версия API: %s",
+  "scoreboard.version.update_mod": "Нужно обновить мод!",
+
+  "modmenu.summaryTranslation.minesweeper": "Добавляет сапёр в майнкрафт!",
+  "modmenu.descriptionTranslation.minesweeper": "Добавляет сапёр в майнкрафт!"
 }

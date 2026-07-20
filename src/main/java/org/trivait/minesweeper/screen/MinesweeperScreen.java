@@ -17,6 +17,9 @@ import org.trivait.minesweeper.game.Cell;
 import org.trivait.minesweeper.game.GameBoard;
 import org.trivait.minesweeper.game.GameSettings;
 import org.trivait.minesweeper.game.SavedGame;
+import org.trivait.minesweeper.screen.widget.DigitDisplayWidget;
+import org.trivait.minesweeper.screen.widget.ExplosionAnimation;
+import org.trivait.minesweeper.screen.widget.SmileyButtonWidget;
 
 import java.util.ArrayList;
 import java.util.List;
