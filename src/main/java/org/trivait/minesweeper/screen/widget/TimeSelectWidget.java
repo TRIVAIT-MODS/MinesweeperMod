@@ -1,4 +1,4 @@
-package org.trivait.minesweeper.screen;
+package org.trivait.minesweeper.screen.widget;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.RenderPipelines;
@@ -7,21 +7,20 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.joml.Matrix3x2fStack;
 import org.trivait.minesweeper.MineSweeperMod;
+import org.trivait.minesweeper.screen.TimeLeaderboardScreen;
 
-public class ScoreSelectWidget extends ClickableWidget {
+public class TimeSelectWidget extends ClickableWidget {
     private float scale = 1.0f;
     private float targetScale = 1.0f;
     private final float speed = 0.30f;
 
     private final Screen parent;
 
-    public ScoreSelectWidget(int x, int y, int width, int height, Screen parent) {
+    public TimeSelectWidget(int x, int y, int width, int height, Screen parent) {
         super(x, y, width, height, Text.empty());
         this.parent = parent;
     }
@@ -51,10 +50,10 @@ public class ScoreSelectWidget extends ClickableWidget {
         ctx.fill(getX(), getY(), getX()+2, getY()+height-2, -2);
         ctx.fill(getX()+width, getY(), getX()+width-2, getY()+height-2, -1);
 
-        ctx.drawTexture(RenderPipelines.GUI_TEXTURED, Identifier.of(MineSweeperMod.MOD_ID, "textures/gui/score.png"), getX() + 1, getY() + 1, 0, 0, width - 2, height - 2, width - 2, height - 2);
+        ctx.drawTexture(RenderPipelines.GUI_TEXTURED, Identifier.of(MineSweeperMod.MOD_ID, "textures/gui/time.png"), getX() + 1, getY() + 1, 0, 0, width - 2, height - 2, width - 2, height - 2);
 
         var mc = net.minecraft.client.MinecraftClient.getInstance();
-        net.minecraft.text.MutableText label = net.minecraft.text.Text.translatable("leaderboard.mode.score").styled(s -> s.withBold(true));
+        net.minecraft.text.MutableText label = net.minecraft.text.Text.translatable("leaderboard.mode.time").styled(s -> s.withBold(true));
         int tw = mc.textRenderer.getWidth(label) * 2;
         int tx = getX() + (width - tw) / 2;
         int ty = getY() + height - mc.textRenderer.fontHeight * 2 - 8;
@@ -69,7 +68,7 @@ public class ScoreSelectWidget extends ClickableWidget {
 
     @Override
     public boolean mouseClicked(Click click, boolean doubled) {
-        MinecraftClient.getInstance().setScreen(new ScoreLeaderboardScreen(parent));
+        MinecraftClient.getInstance().setScreen(new TimeLeaderboardScreen(this.parent));
 
         return super.mouseClicked(click, doubled);
     }

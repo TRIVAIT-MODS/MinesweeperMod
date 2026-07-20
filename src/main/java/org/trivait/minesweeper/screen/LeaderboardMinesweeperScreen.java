@@ -3,6 +3,7 @@ package org.trivait.minesweeper.screen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
+import org.joml.Matrix3x2fStack;
 import org.trivait.minesweeper.MinesweeperModClient;
 import org.trivait.minesweeper.config.Config;
 import org.trivait.minesweeper.config.GameMode;
@@ -19,7 +20,7 @@ public class LeaderboardMinesweeperScreen extends MinesweeperScreen {
     private final String playerName;
     private long timerStartMs = 0;
     private boolean lbTimerRunning = false;
-    private int elapsedTenths = 0;
+    private int elapsedMs = 0;
     private boolean resultSubmitted = false;
 
     private int winCount = 0;
@@ -30,13 +31,14 @@ public class LeaderboardMinesweeperScreen extends MinesweeperScreen {
         this.lbMode = lbMode;
         this.category = category;
         this.playerName = MinecraftClient.getInstance().getSession().getUsername();
+        MinesweeperModClient.setSavedGame(null);
     }
 
     @Override
     protected void resetGame() {
         if (lbMode == GameMode.LEADERBOARD_TIME) {
             lbTimerRunning = false;
-            elapsedTenths = 0;
+            elapsedMs = 0;
             resultSubmitted = false;
         }
         super.resetGame();
@@ -52,7 +54,7 @@ public class LeaderboardMinesweeperScreen extends MinesweeperScreen {
             public void onExplode(int cellX, int cellY) {
                 base.onExplode(cellX, cellY);
                 if (lbMode == GameMode.LEADERBOARD_TIME && lbTimerRunning) {
-                    elapsedTenths = (int) ((System.currentTimeMillis() - timerStartMs) / 100);
+                    elapsedMs = (int) (System.currentTimeMillis() - timerStartMs);
                     lbTimerRunning = false;
                 }
             }
@@ -68,12 +70,13 @@ public class LeaderboardMinesweeperScreen extends MinesweeperScreen {
     private void handleWin() {
         if (lbMode == GameMode.LEADERBOARD_TIME) {
             if (lbTimerRunning) {
-                elapsedTenths = (int) ((System.currentTimeMillis() - timerStartMs) / 100);
+                elapsedMs = (int) (System.currentTimeMillis() - timerStartMs);
                 lbTimerRunning = false;
             }
             if (!resultSubmitted) {
                 resultSubmitted = true;
-                SheetsApi.submitTimeAsync(playerName, (elapsedTenths + 5) / 10, category);
+                double seconds = elapsedMs / 1000.0;
+                SheetsApi.submitTimeAsync(playerName, seconds, category);
             }
         } else if (lbMode == GameMode.LEADERBOARD_WIN_COUNT) {
             winCount++;
@@ -92,7 +95,7 @@ public class LeaderboardMinesweeperScreen extends MinesweeperScreen {
                 lbTimerRunning = true;
             }
             if (lbTimerRunning) {
-                elapsedTenths = (int) ((System.currentTimeMillis() - timerStartMs) / 100);
+                elapsedMs = (int) (System.currentTimeMillis() - timerStartMs);
             }
         }
     }
@@ -104,11 +107,13 @@ public class LeaderboardMinesweeperScreen extends MinesweeperScreen {
     }
 
     private void drawTopCounter(DrawContext ctx) {
+        Matrix3x2fStack matrices = ctx.getMatrices();
+
         String text;
         if (lbMode == GameMode.LEADERBOARD_TIME) {
-            int secs = elapsedTenths / 10;
-            int tenths = elapsedTenths % 10;
-            text = secs + "." + tenths;
+            int secs = elapsedMs / 1000;
+            int centis = (elapsedMs % 1000) / 10;
+            text = secs + "." + String.format("%02d", centis);
         } else {
             text = String.valueOf(winCount);
         }
@@ -116,16 +121,17 @@ public class LeaderboardMinesweeperScreen extends MinesweeperScreen {
         Text label = Text.literal(text);
         int tw = textRenderer.getWidth(label);
 
-        ctx.getMatrices().pushMatrix();
-        ctx.getMatrices().translate(width / 2f, 4f);
-        ctx.getMatrices().scale(2f, 2f);
-        ctx.getMatrices().translate(-tw / 2f, 0f);
+        matrices.pushMatrix();
+        matrices.translate(width / 2f, 4f);
+        matrices.scale(2f, 2f);
+        matrices.translate(-tw / 2f, 0f);
         ctx.drawText(textRenderer, label, 0, 0, 0xFFFFFFFF, true);
-        ctx.getMatrices().popMatrix();
+        matrices.popMatrix();
     }
 
     @Override
     public void close() {
+        MinesweeperModClient.setSavedGame(null);
         super.close();
         Config cfg = MinesweeperModClient.CONFIG;
         SavedGame saved = MinesweeperModClient.getSavedGame();
