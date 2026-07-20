@@ -117,7 +117,7 @@ public class LeaderboardWidget extends ClickableWidget {
             float ratio = (float) visibleRows / entries.size();
             int thumbH = Math.max(8, (int) (listH * ratio));
             int thumbY = listY + (int) ((listH - thumbH) * ((float) scrollOffset / maxScroll));
-            ctx.fill(sbX, listY, sbX + 2, listY + listH, 0xFF333333);
+            ctx.fill(sbX, listY, sbX + 2, listY + listH-1, 0xFF333333);
             ctx.fill(sbX, thumbY, sbX + 2, thumbY + thumbH, 0xFF888888);
         }
     }

@@ -3,13 +3,17 @@ package org.trivait.minesweeper.leaderboard;
 import org.trivait.minesweeper.game.GameSettings;
 
 public enum BoardCategory {
-    S8x8("8x8"),
-    S16x16("16x16"),
-    S26x18("26x18");
+    S8x8("8x8", 8),
+    S16x16("16x16", 30),
+    S26x18("26x18", 65);
 
     public final String label;
+    public final int mines;
 
-    BoardCategory(String label) { this.label = label; }
+    BoardCategory(String label, int mines) {
+        this.label = label;
+        this.mines = mines;
+    }
 
     public static BoardCategory from(int w, int h) {
         if (w <= 8  && h <= 8)  return S8x8;
