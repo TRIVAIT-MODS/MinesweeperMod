@@ -7,14 +7,14 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
-import org.trivait.minesweeper.MinesweeperModClient;
+import org.trivait.minesweeper.MinesweeperMod;
 
 public class SmileyButtonWidget extends AbstractWidget {
 
-    private static final Identifier TEX_PLAYING = Identifier.fromNamespaceAndPath(MinesweeperModClient.MOD_ID, "textures/gui/smiley_playing.png");
-    private static final Identifier TEX_WIN     = Identifier.fromNamespaceAndPath(MinesweeperModClient.MOD_ID, "textures/gui/smiley_win.png");
-    private static final Identifier TEX_LOSE    = Identifier.fromNamespaceAndPath(MinesweeperModClient.MOD_ID, "textures/gui/smiley_lose.png");
-    private static final Identifier TEX_HOVER   = Identifier.fromNamespaceAndPath(MinesweeperModClient.MOD_ID, "textures/gui/smiley_hover.png");
+    private static final Identifier TEX_PLAYING = Identifier.fromNamespaceAndPath(MinesweeperMod.MOD_ID, "textures/gui/smiley_playing.png");
+    private static final Identifier TEX_WIN     = Identifier.fromNamespaceAndPath(MinesweeperMod.MOD_ID, "textures/gui/smiley_win.png");
+    private static final Identifier TEX_LOSE    = Identifier.fromNamespaceAndPath(MinesweeperMod.MOD_ID, "textures/gui/smiley_lose.png");
+    private static final Identifier TEX_HOVER   = Identifier.fromNamespaceAndPath(MinesweeperMod.MOD_ID, "textures/gui/smiley_hover.png");
 
     public enum State { PLAYING, WIN, LOSE }
 

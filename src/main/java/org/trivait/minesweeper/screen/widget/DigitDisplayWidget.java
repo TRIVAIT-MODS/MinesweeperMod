@@ -3,11 +3,11 @@ package org.trivait.minesweeper.screen.widget;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
-import org.trivait.minesweeper.MinesweeperModClient;
+import org.trivait.minesweeper.MinesweeperMod;
 
 public class DigitDisplayWidget {
 
-    private static final Identifier TEX_DIGITS = Identifier.fromNamespaceAndPath(MinesweeperModClient.MOD_ID, "textures/gui/digits.png");
+    private static final Identifier TEX_DIGITS = Identifier.fromNamespaceAndPath(MinesweeperMod.MOD_ID, "textures/gui/digits.png");
 
     private static final int DIGIT_W  = 14;
     private static final int DIGIT_H  = 23;

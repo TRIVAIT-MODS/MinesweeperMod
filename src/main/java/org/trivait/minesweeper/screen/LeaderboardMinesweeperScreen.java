@@ -3,7 +3,7 @@ package org.trivait.minesweeper.screen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
-import org.trivait.minesweeper.MinesweeperModClient;
+import org.trivait.minesweeper.MinesweeperMod;
 import org.trivait.minesweeper.config.Config;
 import org.trivait.minesweeper.config.GameMode;
 import org.trivait.minesweeper.game.GameBoard;
@@ -19,7 +19,7 @@ public class LeaderboardMinesweeperScreen extends MinesweeperScreen {
     private final String playerName;
     private long timerStartMs = 0;
     private boolean lbTimerRunning = false;
-    private int elapsedTenths = 0;
+    private int elapsedMs = 0;
     private boolean resultSubmitted = false;
 
     private int winCount = 0;
@@ -30,13 +30,14 @@ public class LeaderboardMinesweeperScreen extends MinesweeperScreen {
         this.lbMode = lbMode;
         this.category = category;
         this.playerName = Minecraft.getInstance().getUser().getName();
+        MinesweeperMod.setSavedGame(null);
     }
 
     @Override
     protected void resetGame() {
         if (lbMode == GameMode.LEADERBOARD_TIME) {
             lbTimerRunning = false;
-            elapsedTenths = 0;
+            elapsedMs = 0;
             resultSubmitted = false;
         }
         super.resetGame();
@@ -52,7 +53,7 @@ public class LeaderboardMinesweeperScreen extends MinesweeperScreen {
             public void onExplode(int cellX, int cellY) {
                 base.onExplode(cellX, cellY);
                 if (lbMode == GameMode.LEADERBOARD_TIME && lbTimerRunning) {
-                    elapsedTenths = (int) ((System.currentTimeMillis() - timerStartMs) / 100);
+                    elapsedMs = (int) (System.currentTimeMillis() - timerStartMs);
                     lbTimerRunning = false;
                 }
             }
@@ -68,12 +69,12 @@ public class LeaderboardMinesweeperScreen extends MinesweeperScreen {
     private void handleWin() {
         if (lbMode == GameMode.LEADERBOARD_TIME) {
             if (lbTimerRunning) {
-                elapsedTenths = (int) ((System.currentTimeMillis() - timerStartMs) / 100);
+                elapsedMs = (int) (System.currentTimeMillis() - timerStartMs);
                 lbTimerRunning = false;
             }
             if (!resultSubmitted) {
                 resultSubmitted = true;
-                SheetsApi.submitTimeAsync(playerName, (elapsedTenths + 5) / 10, category);
+                SheetsApi.submitTimeAsync(playerName, elapsedMs / 1000.0, category);
             }
         } else if (lbMode == GameMode.LEADERBOARD_WIN_COUNT) {
             winCount++;
@@ -92,7 +93,7 @@ public class LeaderboardMinesweeperScreen extends MinesweeperScreen {
                 lbTimerRunning = true;
             }
             if (lbTimerRunning) {
-                elapsedTenths = (int) ((System.currentTimeMillis() - timerStartMs) / 100);
+                elapsedMs = (int) (System.currentTimeMillis() - timerStartMs);
             }
         }
     }
@@ -106,9 +107,9 @@ public class LeaderboardMinesweeperScreen extends MinesweeperScreen {
     private void drawTopCounter(GuiGraphicsExtractor ctx) {
         String text;
         if (lbMode == GameMode.LEADERBOARD_TIME) {
-            int secs = elapsedTenths / 10;
-            int tenths = elapsedTenths % 10;
-            text = secs + "." + tenths;
+            int secs = elapsedMs / 1000;
+            int centis = (elapsedMs % 1000) / 10;
+            text = secs + "." + String.format("%02d", centis);
         } else {
             text = String.valueOf(winCount);
         }
@@ -127,12 +128,12 @@ public class LeaderboardMinesweeperScreen extends MinesweeperScreen {
     @Override
     public void onClose() {
         super.onClose();
-        Config cfg = MinesweeperModClient.CONFIG;
-        SavedGame saved = MinesweeperModClient.getSavedGame();
+        Config cfg = MinesweeperMod.CONFIG;
+        SavedGame saved = MinesweeperMod.getSavedGame();
         if (saved != null) {
-            this.minecraft.setScreen(new MinesweeperScreen(saved, cfg.enableAnimations, GameMode.DEFAULT));
+            Minecraft.getInstance().setScreen(new MinesweeperScreen(saved, cfg.enableAnimations, GameMode.DEFAULT));
         } else {
-            this.minecraft.setScreen(new MinesweeperScreen(new GameSettings(cfg.gridWidth, cfg.gridHeight, cfg.mines), cfg.enableAnimations, GameMode.DEFAULT));
+            Minecraft.getInstance().setScreen(new MinesweeperScreen(new GameSettings(cfg.gridWidth, cfg.gridHeight, cfg.mines), cfg.enableAnimations, GameMode.DEFAULT));
         }
     }
 }

@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.trivait.minesweeper.MinesweeperModClient;
+import org.trivait.minesweeper.MinesweeperMod;
 import org.trivait.minesweeper.config.Config;
 import org.trivait.minesweeper.config.GameMode;
 import org.trivait.minesweeper.config.MainMenuButtonPosition;
@@ -25,14 +25,14 @@ public abstract class TitleScreenMixin extends Screen {
 
     @Inject(method = "init", at = @At("TAIL"))
     private void addMinesweeperButton(CallbackInfo ci) {
-        Config cfg = MinesweeperModClient.CONFIG;
+        Config cfg = MinesweeperMod.CONFIG;
         if (cfg.mainMenuButtonPosition == null) {
             cfg.mainMenuButtonPosition = MainMenuButtonPosition.RIGHT_MULTIPLAYER;
         }
         SpriteIconButton minesweeperBtn = SpriteIconButton.builder(
                 Component.empty(),
                 (button) -> {
-                    SavedGame saved = MinesweeperModClient.getSavedGame();
+                    SavedGame saved = MinesweeperMod.getSavedGame();
                     if (saved != null) {
                         this.minecraft.setScreen(new MinesweeperScreen(saved, cfg.enableAnimations, GameMode.DEFAULT));
                     } else {
