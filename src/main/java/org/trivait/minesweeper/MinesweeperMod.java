@@ -6,7 +6,7 @@ import net.fabricmc.api.ClientModInitializer;
 import org.trivait.minesweeper.config.Config;
 import org.trivait.minesweeper.game.SavedGame;
 
-public class MinesweeperModClient implements ClientModInitializer {
+public class MinesweeperMod implements ClientModInitializer {
 
     public static final String MOD_ID = "minesweeper";
     public static Config CONFIG;

@@ -1,12 +1,12 @@
-package org.trivait.minesweeper.screen;
+package org.trivait.minesweeper.screen.widget;
 
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.util.Identifier;
-import org.trivait.minesweeper.MinesweeperModClient;
+import org.trivait.minesweeper.MinesweeperMod;
 
 public class DigitDisplayWidget {
 
-    private static final Identifier TEX_DIGITS = Identifier.of(MinesweeperModClient.MOD_ID, "textures/gui/digits.png");
+    private static final Identifier TEX_DIGITS = Identifier.of(MinesweeperMod.MOD_ID, "textures/gui/digits.png");
 
     private static final int DIGIT_W  = 14;
     private static final int DIGIT_H  = 23;

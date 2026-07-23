@@ -1,8 +1,8 @@
-package org.trivait.minesweeper.screen;
+package org.trivait.minesweeper.screen.widget;
 
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.util.Identifier;
-import org.trivait.minesweeper.MinesweeperModClient;
+import org.trivait.minesweeper.MinesweeperMod;
 
 public class ExplosionAnimation {
 
@@ -10,7 +10,7 @@ public class ExplosionAnimation {
     private static final Identifier[] TEXTURES = new Identifier[FRAMES];
     static {
         for (int i = 0; i < FRAMES; i++)
-            TEXTURES[i] = Identifier.of(MinesweeperModClient.MOD_ID, "animation/explosion/" + i + ".png");
+            TEXTURES[i] = Identifier.of(MinesweeperMod.MOD_ID, "animation/explosion/" + i + ".png");
     }
 
     private static final float ASPECT = 16f / 9f;
