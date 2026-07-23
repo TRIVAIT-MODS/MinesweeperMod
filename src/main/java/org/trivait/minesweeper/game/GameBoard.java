@@ -48,20 +48,20 @@ public class GameBoard {
         this.h = sg.h;
         this.mines = sg.mines;
         this.grid = new Cell[h][w];
-        int len = w * h;
         for (int y = 0; y < h; y++) {
             for (int x = 0; x < w; x++) {
                 int idx = y * w + x;
+                Cell src = (sg.cells != null && sg.cells.length == w * h) ? sg.cells[idx] : null;
                 Cell c = new Cell();
-                c.mine = sg.mine[idx];
-                c.revealed = sg.revealed[idx];
-                c.flagged = sg.flagged[idx];
-                c.adjacent = sg.adjacent[idx];
-                c.revealProgress = (sg.revealProgress != null && sg.revealProgress.length == len)
-                    ? sg.revealProgress[idx] : (c.revealed ? 1f : -1f);
-                c.delayTicks = (sg.delayTicks != null && sg.delayTicks.length == len)
-                    ? sg.delayTicks[idx] : -1;
-                c.scheduled = (sg.scheduled != null && sg.scheduled.length == len) && sg.scheduled[idx];
+                if (src != null) {
+                    c.mine = src.mine;
+                    c.revealed = src.revealed;
+                    c.flagged = src.flagged;
+                    c.adjacent = src.adjacent;
+                    c.revealProgress = src.revealProgress;
+                    c.delayTicks = src.delayTicks;
+                    c.scheduled = src.scheduled;
+                }
                 grid[y][x] = c;
             }
         }
@@ -92,23 +92,44 @@ public class GameBoard {
         sg.alive = alive; sg.won = won; sg.firstClick = firstClick;
         sg.timerRunning = timerRunning;
         sg.elapsedSeconds = elapsedSeconds;
-        int len = w * h;
-        sg.mine = new boolean[len]; sg.revealed = new boolean[len];
-        sg.flagged = new boolean[len]; sg.adjacent = new int[len];
-        sg.revealProgress = new float[len]; sg.delayTicks = new int[len];
-        sg.scheduled = new boolean[len];
+        sg.cells = new Cell[w * h];
         for (int y = 0; y < h; y++) {
             for (int x = 0; x < w; x++) {
-                int idx = y * w + x;
-                Cell c = grid[y][x];
-                sg.mine[idx] = c.mine; sg.revealed[idx] = c.revealed;
-                sg.flagged[idx] = c.flagged; sg.adjacent[idx] = c.adjacent;
-                sg.revealProgress[idx] = c.revealProgress;
-                sg.delayTicks[idx] = c.delayTicks;
-                sg.scheduled[idx] = c.scheduled;
+                Cell src = grid[y][x];
+                Cell dst = new Cell();
+                dst.mine = src.mine;
+                dst.revealed = src.revealed;
+                dst.flagged = src.flagged;
+                dst.adjacent = src.adjacent;
+                dst.revealProgress = src.revealProgress;
+                dst.delayTicks = src.delayTicks;
+                dst.scheduled = src.scheduled;
+                sg.cells[y * w + x] = dst;
             }
         }
         return sg;
+    }
+
+    public void chord(int x, int y, boolean animations) {
+        Cell c = grid[y][x];
+        if (!c.revealed || c.mine || c.adjacent <= 0) return;
+        int flagsAround = 0;
+        for (int dy = -1; dy <= 1; dy++)
+            for (int dx = -1; dx <= 1; dx++) {
+                if (dx == 0 && dy == 0) continue;
+                int nx = x + dx, ny = y + dy;
+                if (nx >= 0 && nx < w && ny >= 0 && ny < h && grid[ny][nx].flagged) flagsAround++;
+            }
+        if (flagsAround != c.adjacent) return;
+        for (int dy = -1; dy <= 1; dy++)
+            for (int dx = -1; dx <= 1; dx++) {
+                if (dx == 0 && dy == 0) continue;
+                int nx = x + dx, ny = y + dy;
+                if (nx >= 0 && nx < w && ny >= 0 && ny < h) {
+                    Cell n = grid[ny][nx];
+                    if (!n.revealed && !n.flagged) startRevealWave(nx, ny, animations);
+                }
+            }
     }
 
     public void placeMinesAvoiding(int avoidX, int avoidY) {
