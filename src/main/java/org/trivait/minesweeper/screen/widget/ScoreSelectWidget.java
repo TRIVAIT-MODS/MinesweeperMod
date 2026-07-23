@@ -9,7 +9,7 @@ import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.joml.Matrix3x2fStack;
-import org.trivait.minesweeper.MineSweeperMod;
+import org.trivait.minesweeper.MinesweeperMod;
 import org.trivait.minesweeper.screen.ScoreLeaderboardScreen;
 
 public class ScoreSelectWidget extends ClickableWidget {
@@ -49,7 +49,7 @@ public class ScoreSelectWidget extends ClickableWidget {
         ctx.fill(getX(), getY(), getX()+2, getY()+height-2, -2);
         ctx.fill(getX()+width, getY(), getX()+width-2, getY()+height-2, -1);
 
-        ctx.drawTexture(RenderPipelines.GUI_TEXTURED, Identifier.of(MineSweeperMod.MOD_ID, "textures/gui/score.png"), getX() + 1, getY() + 1, 0, 0, width - 2, height - 2, width - 2, height - 2);
+        ctx.drawTexture(RenderPipelines.GUI_TEXTURED, Identifier.of(MinesweeperMod.MOD_ID, "textures/gui/score.png"), getX() + 1, getY() + 1, 0, 0, width - 2, height - 2, width - 2, height - 2);
 
         var mc = net.minecraft.client.MinecraftClient.getInstance();
         net.minecraft.text.MutableText label = net.minecraft.text.Text.translatable("leaderboard.mode.score").styled(s -> s.withBold(true));

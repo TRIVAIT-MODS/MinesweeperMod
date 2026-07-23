@@ -5,7 +5,7 @@ import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
-import org.trivait.minesweeper.MinesweeperModClient;
+import org.trivait.minesweeper.MinesweeperMod;
 import org.trivait.minesweeper.config.GameMode;
 import org.trivait.minesweeper.leaderboard.BoardCategory;
 import org.trivait.minesweeper.leaderboard.LeaderboardCache;
@@ -71,7 +71,7 @@ public class TimeLeaderboardScreen extends Screen {
         this.playButton = ButtonWidget.builder(Text.translatable("leaderboard.play").setStyle(Style.EMPTY.withBold(true)), button -> {
             client.setScreen(new LeaderboardMinesweeperScreen(
                     boardCategory.toGameSettings(),
-                    MinesweeperModClient.CONFIG.enableAnimations,
+                    MinesweeperMod.CONFIG.enableAnimations,
                     GameMode.LEADERBOARD_TIME,
                     boardCategory
             ));

@@ -7,11 +7,5 @@ public class SavedGame {
     public boolean alive, won, firstClick;
     public boolean timerRunning;
     public int elapsedSeconds;
-    public boolean[] mine;
-    public boolean[] revealed;
-    public boolean[] flagged;
-    public int[] adjacent;
-    public float[] revealProgress;
-    public int[] delayTicks;
-    public boolean[] scheduled;
+    public Cell[] cells;
 }

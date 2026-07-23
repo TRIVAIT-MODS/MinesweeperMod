@@ -1,18 +1,23 @@
 package org.trivait.minesweeper.screen;
 
+import me.shedaniel.autoconfig.AutoConfig;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.TextIconButtonWidget;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.sound.PositionedSoundInstance;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import org.joml.Matrix3x2fStack;
-import org.trivait.minesweeper.MinesweeperModClient;
+import org.trivait.minesweeper.MinesweeperMod;
+import org.trivait.minesweeper.config.Config;
 import org.trivait.minesweeper.config.GameMode;
 import org.trivait.minesweeper.game.Cell;
 import org.trivait.minesweeper.game.GameBoard;
@@ -27,7 +32,7 @@ import java.util.List;
 
 public class MinesweeperScreen extends Screen {
 
-    private static final Identifier TEX_FLAG     = Identifier.of(MinesweeperModClient.MOD_ID, "textures/gui/flag.png");
+    private static final Identifier TEX_FLAG     = Identifier.of(MinesweeperMod.MOD_ID, "textures/gui/flag.png");
     private static final Identifier TEX_BARRIER  = Identifier.ofVanilla("textures/item/barrier.png");
     private static final Identifier TEX_TNT_SIDE = Identifier.ofVanilla("textures/block/tnt_side.png");
 
@@ -80,6 +85,15 @@ public class MinesweeperScreen extends Screen {
         this.initialSave = savedGame;
         this.animations = animations;
         this.gameMode = gameMode;
+
+        if (gameMode==GameMode.DEFAULT) {
+            Config cfg = MinesweeperMod.CONFIG;
+
+            if (savedGame.w!=cfg.gridWidth||savedGame.h!=cfg.gridHeight||savedGame.mines!=cfg.mines) {
+                MinesweeperMod.setSavedGame(null);
+                client.setScreen(new MinesweeperScreen(new GameSettings(cfg.gridWidth, cfg.gridHeight, cfg.mines), cfg.enableAnimations, GameMode.DEFAULT));
+            }
+        }
     }
 
     @Override
@@ -132,16 +146,26 @@ public class MinesweeperScreen extends Screen {
 
         if (gameMode == GameMode.DEFAULT) {
             this.addDrawableChild(leaderboardButton);
+
+            TextIconButtonWidget configBtn = TextIconButtonWidget.builder(
+                    Text.empty(),
+                    (button) -> {
+                        client.setScreen(AutoConfig.getConfigScreen(Config.class, this).get());
+                    },
+                    true
+            ).width(20).texture(Identifier.of("minesweeper", "icon/config"), 18, 18).build();
+            configBtn.setPosition(width-8-20, 8);
+            this.addDrawableChild(configBtn);
         }
     }
 
     private GameSettings defaultSettings() {
-        var cfg = MinesweeperModClient.CONFIG;
+        var cfg = MinesweeperMod.CONFIG;
         return new GameSettings(cfg.gridWidth, cfg.gridHeight, cfg.mines);
     }
 
     protected void resetGame() {
-        MinesweeperModClient.setSavedGame(null);
+        MinesweeperMod.setSavedGame(null);
         explosions.clear();
         board = new GameBoard(newGameSettings != null ? newGameSettings : defaultSettings());
         board.setSoundCallback(makeSoundCallback());
@@ -157,7 +181,7 @@ public class MinesweeperScreen extends Screen {
             public void onExplode(int cellX, int cellY) {
                 mc.getSoundManager().play(PositionedSoundInstance.master(
                     SoundEvents.ENTITY_GENERIC_EXPLODE.value(), 0.7f, 1.0f));
-                if (MinesweeperModClient.CONFIG.enableExplosionAnimation) {
+                if (MinesweeperMod.CONFIG.enableExplosionAnimation) {
                     int cx = gridX + cellX * cellSize + cellSize / 2;
                     int cy = gridY + cellY * cellSize + cellSize / 2;
                     explosions.add(new ExplosionAnimation(cx, cy, cellSize * 3));
@@ -172,7 +196,7 @@ public class MinesweeperScreen extends Screen {
 
     @Override
     public void close() {
-        if (board != null) MinesweeperModClient.setSavedGame(board.toSavedGame());
+        if (board != null) MinesweeperMod.setSavedGame(board.toSavedGame());
         super.close();
     }
 
@@ -213,7 +237,13 @@ public class MinesweeperScreen extends Screen {
 
         if (button == 1) {
             if (!c.revealed) board.toggleFlag(gx, gy);
-            MinesweeperModClient.setSavedGame(board.toSavedGame());
+            MinesweeperMod.setSavedGame(board.toSavedGame());
+            return true;
+        }
+
+        if (button == 0 && c.revealed) {
+            board.chord(gx, gy, animations);
+            MinesweeperMod.setSavedGame(board.toSavedGame());
             return true;
         }
 
@@ -230,7 +260,7 @@ public class MinesweeperScreen extends Screen {
                     SoundEvents.BLOCK_DEEPSLATE_BREAK, 0.25f, 1.0f));
             }
             board.startRevealWave(gx, gy, animations);
-            MinesweeperModClient.setSavedGame(board.toSavedGame());
+            MinesweeperMod.setSavedGame(board.toSavedGame());
             return true;
         }
 
@@ -271,15 +301,13 @@ public class MinesweeperScreen extends Screen {
 
     private void drawGrid(DrawContext context, int mouseX, int mouseY) {
         Matrix3x2fStack matrices = context.getMatrices();
-
         double scaleFactor = mc.getWindow().getScaleFactor();
         float uiScale = cellSize / 24f;
         float textScale = Math.max(0.70f, Math.min(1.30f, uiScale * 1.05f));
-        int texSize = Math.max(10, Math.min(cellSize, (int) (cellSize * 0.78f)));
+        int texSize = Math.max(10, Math.min(cellSize - 2, (int) (cellSize * 0.78f)));
         int border = 0xFF555555;
-        boolean highScale = scaleFactor >= 3;
-        float invScale = (float) (1.0 / scaleFactor);
         int half = cellSize / 2;
+        float invScale = (float) (1.0 / scaleFactor);
 
         for (int yy = 0; yy < board.h; yy++) {
             for (int xx = 0; xx < board.w; xx++) {
@@ -307,24 +335,19 @@ public class MinesweeperScreen extends Screen {
                     matrices.translate(-cx, -cy);
                 }
 
-                context.fill(cx - half, cy - half, cx + half, cy + half, bg);
+                context.fill(x, y, x + cellSize, y + cellSize, bg);
 
-                if (highScale) {
-                    matrices.pushMatrix();
-                    matrices.scale(invScale, invScale);
-                    int px1 = (int) Math.round(x * scaleFactor), py1 = (int) Math.round(y * scaleFactor);
-                    int px2 = (int) Math.round((x + cellSize) * scaleFactor), py2 = (int) Math.round((y + cellSize) * scaleFactor);
-                    context.fill(px1, py1, px2, py1 + 1, border);
-                    context.fill(px1, py2 - 1, px2, py2, border);
-                    context.fill(px1, py1, px1 + 1, py2, border);
-                    context.fill(px2 - 1, py1, px2, py2, border);
-                    matrices.popMatrix();
-                } else {
-                    context.fill(x, y, x + cellSize, y + 1, border);
-                    context.fill(x, y + cellSize - 1, x + cellSize, y + cellSize, border);
-                    context.fill(x, y, x + 1, y + cellSize, border);
-                    context.fill(x + cellSize - 1, y, x + cellSize, y + cellSize, border);
-                }
+                matrices.pushMatrix();
+                matrices.scale(invScale, invScale);
+                int px1 = (int) Math.round(x * scaleFactor);
+                int py1 = (int) Math.round(y * scaleFactor);
+                int px2 = (int) Math.round((x + cellSize) * scaleFactor);
+                int py2 = (int) Math.round((y + cellSize) * scaleFactor);
+                context.fill(px1, py1, px2, py1 + 1, border);
+                context.fill(px1, py2 - 1, px2, py2, border);
+                context.fill(px1, py1, px1 + 1, py2, border);
+                context.fill(px2 - 1, py1, px2, py2, border);
+                matrices.popMatrix();
 
                 if (c.revealed || c.flagged) {
                     drawCellContent(context, c, cx, cy, texSize, textScale);
@@ -336,8 +359,8 @@ public class MinesweeperScreen extends Screen {
     }
 
     private void drawCellContent(DrawContext context, Cell c, int cx, int cy, int texSize, float textScale) {
-        Matrix3x2fStack matrices = context.getMatrices();
 
+        Matrix3x2fStack matrices = context.getMatrices();
         if (c.revealed) {
             if (c.mine && !board.won) {
                 Identifier tex = (c.flagged && !board.alive) ? TEX_FLAG : TEX_TNT_SIDE;
