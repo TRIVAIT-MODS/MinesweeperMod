@@ -7,14 +7,14 @@ import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import org.trivait.minesweeper.MinesweeperModClient;
+import org.trivait.minesweeper.MinesweeperMod;
 
 public class SmileyButtonWidget extends ClickableWidget {
 
-    private static final Identifier TEX_PLAYING = Identifier.of(MinesweeperModClient.MOD_ID, "textures/gui/smiley_playing.png");
-    private static final Identifier TEX_WIN     = Identifier.of(MinesweeperModClient.MOD_ID, "textures/gui/smiley_win.png");
-    private static final Identifier TEX_LOSE    = Identifier.of(MinesweeperModClient.MOD_ID, "textures/gui/smiley_lose.png");
-    private static final Identifier TEX_HOVER   = Identifier.of(MinesweeperModClient.MOD_ID, "textures/gui/smiley_hover.png");
+    private static final Identifier TEX_PLAYING = Identifier.of(MinesweeperMod.MOD_ID, "textures/gui/smiley_playing.png");
+    private static final Identifier TEX_WIN     = Identifier.of(MinesweeperMod.MOD_ID, "textures/gui/smiley_win.png");
+    private static final Identifier TEX_LOSE    = Identifier.of(MinesweeperMod.MOD_ID, "textures/gui/smiley_lose.png");
+    private static final Identifier TEX_HOVER   = Identifier.of(MinesweeperMod.MOD_ID, "textures/gui/smiley_hover.png");
 
     public enum State { PLAYING, WIN, LOSE }
 

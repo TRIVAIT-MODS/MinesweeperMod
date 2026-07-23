@@ -1,5 +1,6 @@
 package org.trivait.minesweeper.screen.widget;
 
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
@@ -15,15 +16,16 @@ import java.util.List;
 
 public class LeaderboardWidget extends ClickableWidget {
 
-    private static final int BG         = 0xCC1A1A1A;
-    private static final int BORDER     = 0xFF555555;
-    private static final int HEADER_BG  = 0xFF2B2B2B;
-    private static final int ROW_ODD    = 0xFF222222;
-    private static final int ROW_EVEN   = 0xFF1A1A1A;
-    private static final int ROW_HOVER  = 0xFF2E2E2E;
-    private static final int ROW_H      = 13;
-    private static final int HEADER_H   = 14;
-    private static final int PAD_X      = 6;
+    private static final int BG        = 0xCC1A1A1A;
+    private static final int BORDER    = 0xFF555555;
+    private static final int HEADER_BG = 0xFF2B2B2B;
+    private static final int ROW_ODD   = 0xFF222222;
+    private static final int ROW_EVEN  = 0xFF1A1A1A;
+    private static final int ROW_HOVER = 0xFF2E2E2E;
+    private static final int ROW_H     = 13;
+    private static final int HEADER_H  = 14;
+    private static final int PAD_X     = 6;
+    private static final int SB_W      = 4;
 
     private static final int COLOR_WHITE  = 0xFFFFFFFF;
     private static final int COLOR_GOLD   = 0xFFFFD700;
@@ -35,6 +37,9 @@ public class LeaderboardWidget extends ClickableWidget {
     private BoardCategory category;
 
     private int scrollOffset = 0;
+    private float smoothScrollOffset = 0f;
+    private float scrollTarget = 0f;
+    private static final boolean SMOOTH = FabricLoader.getInstance().isModLoaded("smoothscroll");
 
     public LeaderboardWidget(int x, int y, int width, int height,
                              LeaderboardCache cache, GameMode gameMode, BoardCategory category) {
@@ -44,8 +49,8 @@ public class LeaderboardWidget extends ClickableWidget {
         this.category = category;
     }
 
-    public void setGameMode(GameMode mode) { this.gameMode = mode; scrollOffset = 0; }
-    public void setCategory(BoardCategory cat) { this.category = cat; scrollOffset = 0; }
+    public void setGameMode(GameMode mode) { this.gameMode = mode; scrollOffset = 0; smoothScrollOffset = 0f; scrollTarget = 0f; }
+    public void setCategory(BoardCategory cat) { this.category = cat; scrollOffset = 0; smoothScrollOffset = 0f; scrollTarget = 0f; }
     public GameMode getGameMode() { return gameMode; }
     public BoardCategory getCategory() { return category; }
 
@@ -55,14 +60,16 @@ public class LeaderboardWidget extends ClickableWidget {
         var mc = MinecraftClient.getInstance();
 
         ctx.fill(x, y, x + w, y + h, BG);
-        ctx.fill(x, y, x + w, y + 1, BORDER);
-        ctx.fill(x, y + h - 1, x + w, y + h, BORDER);
-        ctx.fill(x, y, x + 1, y + h, BORDER);
-        ctx.fill(x + w - 1, y, x + w, y + h, BORDER);
+        ctx.fill(x, y,         x + w, y + 1,     BORDER);
+        ctx.fill(x, y + h - 1, x + w, y + h,     BORDER);
+        ctx.fill(x, y,         x + 1, y + h,     BORDER);
+        ctx.fill(x + w - 1, y, x + w, y + h,     BORDER);
 
         ctx.fill(x + 1, y + 1, x + w - 1, y + HEADER_H + 1, HEADER_BG);
-        String modeLabel = gameMode == GameMode.LEADERBOARD_TIME ? Text.translatable("leaderboard.mode.time").getString() : Text.translatable("leaderboard.mode.score").getString();
-        String catLabel  = category != null ? category.label : "";
+        String modeLabel = gameMode == GameMode.LEADERBOARD_TIME
+                ? Text.translatable("leaderboard.mode.time").getString()
+                : Text.translatable("leaderboard.mode.score").getString();
+        String catLabel = category != null ? category.label : "";
         ctx.drawText(mc.textRenderer, modeLabel + " - " + catLabel, x + PAD_X, y + 4, COLOR_WHITE, false);
 
         int listY = y + HEADER_H + 2;
@@ -86,16 +93,33 @@ public class LeaderboardWidget extends ClickableWidget {
         int maxScroll = Math.max(0, entries.size() - visibleRows);
         scrollOffset = Math.max(0, Math.min(scrollOffset, maxScroll));
 
+        if (SMOOTH) {
+            scrollTarget = Math.max(0, Math.min(scrollTarget, maxScroll));
+            smoothScrollOffset += (scrollTarget - smoothScrollOffset) * 0.25f;
+            if (Math.abs(smoothScrollOffset - scrollTarget) < 0.01f) smoothScrollOffset = scrollTarget;
+        }
+
+        boolean needsScrollbar = entries.size() > visibleRows && maxScroll > 0;
+        int rowW = w - 2 - (needsScrollbar ? SB_W + 2 : 0);
+
         boolean isTime = gameMode == GameMode.LEADERBOARD_TIME;
         int rankW = mc.textRenderer.getWidth("00. ");
 
-        for (int i = 0; i < visibleRows && (i + scrollOffset) < entries.size(); i++) {
-            int rowY = listY + i * ROW_H;
-            int rank = i + scrollOffset + 1;
-            LeaderboardEntry entry = entries.get(i + scrollOffset);
+        float renderOffset = SMOOTH ? smoothScrollOffset : scrollOffset;
+        int baseRow = (int) renderOffset;
+        int pixelOffset = (int) ((renderOffset - baseRow) * ROW_H);
 
-            boolean hovered = mouseX >= x && mouseX < x + w && mouseY >= rowY && mouseY < rowY + ROW_H;
-            ctx.fill(x + 1, rowY, x + w - 1, rowY + ROW_H, hovered ? ROW_HOVER : (i % 2 == 0 ? ROW_EVEN : ROW_ODD));
+        ctx.enableScissor(x + 1, listY, x + 1 + rowW, y + h - 2);
+
+        for (int i = 0; i < visibleRows + 2 && (i + baseRow) < entries.size(); i++) {
+            int rowY = listY + i * ROW_H - pixelOffset;
+            int rank = i + baseRow + 1;
+            LeaderboardEntry entry = entries.get(i + baseRow);
+
+            boolean hovered = mouseX >= x + 1 && mouseX < x + 1 + rowW
+                           && mouseY >= rowY  && mouseY < rowY + ROW_H;
+            ctx.fill(x + 1, rowY, x + 1 + rowW, rowY + ROW_H,
+                    hovered ? ROW_HOVER : (rank % 2 == 0 ? ROW_EVEN : ROW_ODD));
 
             int placeColor = placeColor(rank);
             boolean top3 = rank <= 3;
@@ -108,17 +132,20 @@ public class LeaderboardWidget extends ClickableWidget {
 
             String suffix = isTime ? Text.translatable("second.suffix").getString() : "";
             MutableText valueText = Text.literal(entry.value() + suffix).styled(s -> s.withBold(true));
-            int vx = x + w - PAD_X - mc.textRenderer.getWidth(valueText);
+            int vx = x + 1 + rowW - PAD_X - mc.textRenderer.getWidth(valueText);
             ctx.drawText(mc.textRenderer, valueText, vx, rowY + 2, top3 ? placeColor : COLOR_WHITE, false);
         }
 
-        if (entries.size() > visibleRows && maxScroll > 0) {
-            int sbX = x + w - 3;
+        ctx.disableScissor();
+
+        if (needsScrollbar) {
+            int sbX = x + w - 1 - SB_W - 1;
             float ratio = (float) visibleRows / entries.size();
             int thumbH = Math.max(8, (int) (listH * ratio));
-            int thumbY = listY + (int) ((listH - thumbH) * ((float) scrollOffset / maxScroll));
-            ctx.fill(sbX, listY, sbX + 2, listY + listH, 0xFF333333);
-            ctx.fill(sbX, thumbY, sbX + 2, thumbY + thumbH, 0xFF888888);
+            float scrollFrac = maxScroll > 0 ? renderOffset / maxScroll : 0f;
+            int thumbY = listY + (int) ((listH - thumbH) * scrollFrac);
+            ctx.fill(sbX, listY, sbX + SB_W, y + h - 1, 0xFF333333);
+            ctx.fill(sbX, thumbY, sbX + SB_W, thumbY + thumbH, 0xFF888888);
         }
     }
 
@@ -139,10 +166,13 @@ public class LeaderboardWidget extends ClickableWidget {
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
         if (!isMouseOver(mouseX, mouseY)) return false;
-        scrollOffset = Math.max(0, Math.min(
-            scrollOffset - (int) (verticalAmount * 3),
-            Math.max(0, getEntryCount() - height / ROW_H)
-        ));
+        int maxScroll = Math.max(0, getEntryCount() - height / ROW_H);
+        if (SMOOTH) {
+            scrollTarget = Math.max(0, Math.min(scrollTarget - (float) (verticalAmount * 3), maxScroll));
+            scrollOffset = (int) scrollTarget;
+        } else {
+            scrollOffset = Math.max(0, Math.min(scrollOffset - (int) (verticalAmount * 3), maxScroll));
+        }
         return true;
     }
 

@@ -3,8 +3,7 @@ package org.trivait.minesweeper.screen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
-import org.joml.Matrix3x2fStack;
-import org.trivait.minesweeper.MinesweeperModClient;
+import org.trivait.minesweeper.MinesweeperMod;
 import org.trivait.minesweeper.config.Config;
 import org.trivait.minesweeper.config.GameMode;
 import org.trivait.minesweeper.game.GameBoard;
@@ -31,7 +30,7 @@ public class LeaderboardMinesweeperScreen extends MinesweeperScreen {
         this.lbMode = lbMode;
         this.category = category;
         this.playerName = MinecraftClient.getInstance().getSession().getUsername();
-        MinesweeperModClient.setSavedGame(null);
+        MinesweeperMod.setSavedGame(null);
     }
 
     @Override
@@ -75,8 +74,7 @@ public class LeaderboardMinesweeperScreen extends MinesweeperScreen {
             }
             if (!resultSubmitted) {
                 resultSubmitted = true;
-                double seconds = elapsedMs / 1000.0;
-                SheetsApi.submitTimeAsync(playerName, seconds, category);
+                SheetsApi.submitTimeAsync(playerName, elapsedMs / 1000.0, category);
             }
         } else if (lbMode == GameMode.LEADERBOARD_WIN_COUNT) {
             winCount++;
@@ -107,8 +105,6 @@ public class LeaderboardMinesweeperScreen extends MinesweeperScreen {
     }
 
     private void drawTopCounter(DrawContext ctx) {
-        Matrix3x2fStack matrices = ctx.getMatrices();
-
         String text;
         if (lbMode == GameMode.LEADERBOARD_TIME) {
             int secs = elapsedMs / 1000;
@@ -121,24 +117,23 @@ public class LeaderboardMinesweeperScreen extends MinesweeperScreen {
         Text label = Text.literal(text);
         int tw = textRenderer.getWidth(label);
 
-        matrices.pushMatrix();
-        matrices.translate(width / 2f, 4f);
-        matrices.scale(2f, 2f);
-        matrices.translate(-tw / 2f, 0f);
+        ctx.getMatrices().pushMatrix();
+        ctx.getMatrices().translate(width / 2f, 4f);
+        ctx.getMatrices().scale(2f, 2f);
+        ctx.getMatrices().translate(-tw / 2f, 0f);
         ctx.drawText(textRenderer, label, 0, 0, 0xFFFFFFFF, true);
-        matrices.popMatrix();
+        ctx.getMatrices().popMatrix();
     }
 
     @Override
     public void close() {
-        MinesweeperModClient.setSavedGame(null);
         super.close();
-        Config cfg = MinesweeperModClient.CONFIG;
-        SavedGame saved = MinesweeperModClient.getSavedGame();
+        Config cfg = MinesweeperMod.CONFIG;
+        SavedGame saved = MinesweeperMod.getSavedGame();
         if (saved != null) {
-            this.client.setScreen(new MinesweeperScreen(saved, cfg.enableAnimations, GameMode.DEFAULT));
+            MinecraftClient.getInstance().setScreen(new MinesweeperScreen(saved, cfg.enableAnimations, GameMode.DEFAULT));
         } else {
-            this.client.setScreen(new MinesweeperScreen(new GameSettings(cfg.gridWidth, cfg.gridHeight, cfg.mines), cfg.enableAnimations, GameMode.DEFAULT));
+            MinecraftClient.getInstance().setScreen(new MinesweeperScreen(new GameSettings(cfg.gridWidth, cfg.gridHeight, cfg.mines), cfg.enableAnimations, GameMode.DEFAULT));
         }
     }
 }
