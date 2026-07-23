@@ -3,7 +3,7 @@ package org.trivait.minesweeper.screen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
-import org.trivait.minesweeper.MinesweeperModClient;
+import org.trivait.minesweeper.MinesweeperMod;
 import org.trivait.minesweeper.config.Config;
 import org.trivait.minesweeper.config.GameMode;
 import org.trivait.minesweeper.game.GameBoard;
@@ -127,12 +127,12 @@ public class LeaderboardMinesweeperScreen extends MinesweeperScreen {
     @Override
     public void close() {
         super.close();
-        Config cfg = MinesweeperModClient.CONFIG;
-        SavedGame saved = MinesweeperModClient.getSavedGame();
+        Config cfg = MinesweeperMod.CONFIG;
+        SavedGame saved = MinesweeperMod.getSavedGame();
         if (saved != null) {
-            this.client.setScreen(new MinesweeperScreen(saved, cfg.enableAnimations, GameMode.DEFAULT));
+            MinecraftClient.getInstance().setScreen(new MinesweeperScreen(saved, cfg.enableAnimations, GameMode.DEFAULT));
         } else {
-            this.client.setScreen(new MinesweeperScreen(new GameSettings(cfg.gridWidth, cfg.gridHeight, cfg.mines), cfg.enableAnimations, GameMode.DEFAULT));
+            MinecraftClient.getInstance().setScreen(new MinesweeperScreen(new GameSettings(cfg.gridWidth, cfg.gridHeight, cfg.mines), cfg.enableAnimations, GameMode.DEFAULT));
         }
     }
 }

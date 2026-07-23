@@ -9,20 +9,18 @@
 	],
 	"contact": {
 		"homepage": "https://modrinth.com/user/Trivait",
-		"sources": "https://github.com/TRIVAIT-MODS/MinesweeperMod"
+		"sources": "https://github.com/TRIVAIT-MODS/MinesweeperMod",
+		"issues": "https://github.com/TRIVAIT-MODS/MinesweeperMod/issues"
 	},
 	"license": "MIT",
 	"icon": "assets/minesweeper/icon.png",
 	"environment": "client",
 	"entrypoints": {
-		"main": [
-			"org.trivait.minesweeper.MineSweeperMod"
-		],
 		"modmenu": [
 			"org.trivait.minesweeper.modmenu.ModMenuIntegration"
 		],
 		"client": [
-			"org.trivait.minesweeper.MinesweeperModClient"
+			"org.trivait.minesweeper.MinesweeperMod"
 		]
 	},
 	"mixins": [
@@ -37,6 +35,6 @@
 		"cloth-config2": ">=16.0.143"
 	},
 	"suggests": {
-		"another-mod": "*"
+		"smoothscroll": "*"
 	}
 }
