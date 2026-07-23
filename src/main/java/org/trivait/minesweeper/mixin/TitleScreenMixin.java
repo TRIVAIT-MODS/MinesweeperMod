@@ -9,7 +9,6 @@ import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;
 import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
 import com.terraformersmc.modmenu.config.ModMenuConfig;
-import com.terraformersmc.modmenu.gui.widget.UpdateCheckerTexturedButtonWidget;
 import net.fabricmc.fabric.api.client.screen.v1.Screens;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
@@ -22,7 +21,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.trivait.minesweeper.MinesweeperModClient;
+import org.trivait.minesweeper.MinesweeperMod;
 import org.trivait.minesweeper.config.Config;
 import org.trivait.minesweeper.config.GameMode;
 import org.trivait.minesweeper.config.MainMenuButtonPosition;
@@ -41,14 +40,14 @@ public abstract class TitleScreenMixin extends Screen {
 
     @Inject(method = "init", at = @At("TAIL"))
     private void addMinesweeperButton(CallbackInfo ci) {
-        Config cfg = MinesweeperModClient.CONFIG;
+        Config cfg = MinesweeperMod.CONFIG;
         if (cfg.mainMenuButtonPosition == null) {
             cfg.mainMenuButtonPosition = MainMenuButtonPosition.RIGHT_MULTIPLAYER;
         }
         SpriteIconButton minesweeperBtn = SpriteIconButton.builder(
                 Component.empty(),
                 (button) -> {
-                    SavedGame saved = MinesweeperModClient.getSavedGame();
+                    SavedGame saved = MinesweeperMod.getSavedGame();
                     if (saved != null) {
                         this.minecraft.setScreenAndShow(new MinesweeperScreen(saved, cfg.enableAnimations, GameMode.DEFAULT));
                     } else {
@@ -72,7 +71,7 @@ public abstract class TitleScreenMixin extends Screen {
     @Expression("numberOfButtons = ?")
     @Inject(method = "init", at = @At(value = "MIXINEXTRAS:EXPRESSION", shift = At.Shift.AFTER))
     private void adjustAmountOfIconButtons(CallbackInfo ci, @Local(name = "numberOfButtons") LocalIntRef numberOfButtons, @Share("addMinesweeperIconWidget") LocalBooleanRef addMinesweeperIconWidget) {
-        Config cfg = MinesweeperModClient.CONFIG;
+        Config cfg = MinesweeperMod.CONFIG;
         if (cfg.mainMenuButtonPosition == null) {
             cfg.mainMenuButtonPosition = MainMenuButtonPosition.RIGHT_MULTIPLAYER;
         }
@@ -95,12 +94,12 @@ public abstract class TitleScreenMixin extends Screen {
         if (!addMinesweeperIconWidget.get()) return;
         currentButton.set(currentButton.get()+1);
         Screen screen = (TitleScreen) (Object) this;
-        Config cfg = MinesweeperModClient.CONFIG;
+        Config cfg = MinesweeperMod.CONFIG;
 
         SpriteIconButton minesweeperBtn = SpriteIconButton.builder(
                 Component.empty(),
                 (button) -> {
-                    SavedGame saved = MinesweeperModClient.getSavedGame();
+                    SavedGame saved = MinesweeperMod.getSavedGame();
                     if (saved != null) {
                         this.minecraft.setScreenAndShow(new MinesweeperScreen(saved, cfg.enableAnimations, GameMode.DEFAULT));
                     } else {

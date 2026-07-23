@@ -15,7 +15,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class SheetsApi {
 
-    public static final String SCOREBOARD_API_VERSION = "1.0";
+    public static final String SCOREBOARD_API_VERSION = "1.1";
 
     private static final String SPREADSHEET_ID = "1MontuwLcsr7T9EygHmWJ1ziVLi7oAywvdNOb6bmj7KM";
     private static final String CSV_BASE =
@@ -151,13 +151,14 @@ public class SheetsApi {
         for (int i = 1; i < lines.length; i++) {
             String[] cols = splitCsvLine(lines[i]);
             if (cols.length < 2) continue;
-            String name     = cols[0].trim();
-            String value    = cols[1].trim();
-            String category = cols.length >= 3 ? cols[2].trim() : "";
+            String name     = cols[0].trim().replaceAll("[\\p{Cf}\\p{Co}\\p{Cn}]", "");
+            String value    = cols[1].trim().replaceAll("[\\p{Cf}\\p{Co}\\p{Cn}]", "");
+            String category = cols.length >= 3 ? cols[2].trim().replaceAll("[\\p{Cf}\\p{Co}\\p{Cn}]", "") : "";
             if (name.isEmpty()) continue;
             if (categoryFilter != null && !categoryFilter.equalsIgnoreCase(category)) continue;
 
             double numeric = parseSeconds(value);
+            if (Double.isInfinite(numeric)) continue;
             String key = name.toLowerCase() + "\0" + category.toLowerCase();
 
             if (mode == GameMode.LEADERBOARD_TIME) {
@@ -195,10 +196,11 @@ public class SheetsApi {
     }
 
     private static double parseSeconds(String value) {
+        if (value == null || value.isBlank()) return Double.POSITIVE_INFINITY;
         try {
             return Double.parseDouble(value.trim().replace(',', '.'));
         } catch (NumberFormatException e) {
-            return Double.MAX_VALUE;
+            return Double.POSITIVE_INFINITY;
         }
     }
 

@@ -3,14 +3,11 @@ package org.trivait.minesweeper.screen.widget;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
-import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.inventory.tooltip.TooltipComponent;
-import org.trivait.minesweeper.MinesweeperModClient;
+import org.trivait.minesweeper.MinesweeperMod;
 import org.trivait.minesweeper.leaderboard.SheetsApi;
 
 import java.util.ArrayList;
@@ -19,7 +16,7 @@ import java.util.List;
 public class ScoreboardVersionWidget extends AbstractWidget {
 
     private static final int SIZE = 26;
-    private static final Identifier TEX_SCORE = Identifier.fromNamespaceAndPath(MinesweeperModClient.MOD_ID, "textures/gui/api.png");
+    private static final Identifier TEX_SCORE = Identifier.fromNamespaceAndPath(MinesweeperMod.MOD_ID, "textures/gui/api.png");
 
     public ScoreboardVersionWidget(int x, int y) {
         super(x, y, SIZE, SIZE, Component.empty());

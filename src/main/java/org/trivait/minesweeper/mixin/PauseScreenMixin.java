@@ -2,33 +2,23 @@ package org.trivait.minesweeper.mixin;
 
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
-import com.llamalad7.mixinextras.sugar.Share;
-import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;
-import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
-import com.terraformersmc.modmenu.gui.widget.UpdateCheckerTexturedButtonWidget;
-import net.fabricmc.fabric.api.client.screen.v1.Screens;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.layouts.LinearLayout;
 import net.minecraft.client.gui.screens.PauseScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.SpriteIconButton;
-import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.client.server.IntegratedServer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.trivait.minesweeper.MinesweeperModClient;
+import org.trivait.minesweeper.MinesweeperMod;
 import org.trivait.minesweeper.config.Config;
 import org.trivait.minesweeper.config.GameMode;
-import org.trivait.minesweeper.config.MainMenuButtonPosition;
 import org.trivait.minesweeper.config.PauseMenuButtonPosition;
 import org.trivait.minesweeper.game.GameSettings;
 import org.trivait.minesweeper.game.SavedGame;
@@ -43,14 +33,14 @@ public abstract class PauseScreenMixin extends Screen {
 
     @Inject(method = "createPauseMenu", at = @At("RETURN"))
     private void addMinesweeperButton(CallbackInfo ci) {
-        Config cfg = MinesweeperModClient.CONFIG;
+        Config cfg = MinesweeperMod.CONFIG;
         if (cfg.pauseMenuButtonPosition == null) {
             cfg.pauseMenuButtonPosition = PauseMenuButtonPosition.RIGHT_NEXT_ROW;
         }
         SpriteIconButton minesweeperBtn = SpriteIconButton.builder(
                 Component.empty(),
                 (button) -> {
-                    SavedGame saved = MinesweeperModClient.getSavedGame();
+                    SavedGame saved = MinesweeperMod.getSavedGame();
                     if (saved != null) {
                         this.minecraft.setScreenAndShow(new MinesweeperScreen(saved, cfg.enableAnimations, GameMode.DEFAULT));
                     } else {
@@ -83,7 +73,7 @@ public abstract class PauseScreenMixin extends Screen {
     @Expression("integratedServer = ?")
     @Inject(method = "createPauseMenu", at = @At("MIXINEXTRAS:EXPRESSION"))
     private void insertModMenuIconButton(CallbackInfo ci, @Local(name = "iconButtonRow") LinearLayout iconButtonRow) {
-        Config cfg = MinesweeperModClient.CONFIG;
+        Config cfg = MinesweeperMod.CONFIG;
         if (cfg.pauseMenuButtonPosition == null) {
             cfg.pauseMenuButtonPosition = PauseMenuButtonPosition.RIGHT_NEXT_ROW;
         }
@@ -91,7 +81,7 @@ public abstract class PauseScreenMixin extends Screen {
         SpriteIconButton minesweeperBtn = SpriteIconButton.builder(
                 Component.empty(),
                 (button) -> {
-                    SavedGame saved = MinesweeperModClient.getSavedGame();
+                    SavedGame saved = MinesweeperMod.getSavedGame();
                     if (saved != null) {
                         this.minecraft.setScreenAndShow(new MinesweeperScreen(saved, cfg.enableAnimations, GameMode.DEFAULT));
                     } else {

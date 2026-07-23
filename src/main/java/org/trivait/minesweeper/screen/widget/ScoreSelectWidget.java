@@ -10,7 +10,7 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import org.joml.Matrix3x2fStack;
-import org.trivait.minesweeper.MineSweeperMod;
+import org.trivait.minesweeper.MinesweeperMod;
 import org.trivait.minesweeper.screen.ScoreLeaderboardScreen;
 
 public class ScoreSelectWidget extends AbstractWidget {
@@ -50,7 +50,7 @@ public class ScoreSelectWidget extends AbstractWidget {
         ctx.fill(getX(), getY(), getX()+2, getY()+height-2, -2);
         ctx.fill(getX()+width, getY(), getX()+width-2, getY()+height-2, -1);
 
-        ctx.blit(RenderPipelines.GUI_TEXTURED, Identifier.fromNamespaceAndPath(MineSweeperMod.MOD_ID, "textures/gui/score.png"), getX() + 1, getY() + 1, 0, 0, width - 2, height - 2, width - 2, height - 2);
+        ctx.blit(RenderPipelines.GUI_TEXTURED, Identifier.fromNamespaceAndPath(MinesweeperMod.MOD_ID, "textures/gui/score.png"), getX() + 1, getY() + 1, 0, 0, width - 2, height - 2, width - 2, height - 2);
 
         var mc = net.minecraft.client.Minecraft.getInstance();
         Component label = net.minecraft.network.chat.Component.translatable("leaderboard.mode.score").withStyle(s -> s.withBold(true));
