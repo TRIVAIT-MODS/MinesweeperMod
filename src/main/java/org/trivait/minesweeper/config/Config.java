@@ -14,6 +14,9 @@ public class Config implements ConfigData {
 
     public int mines = 40;
 
+    @ConfigEntry.BoundedDiscrete(min = 1, max = 100)
+    public int soundsVolume = 100;
+
     public boolean enableAnimations = true;
     public boolean enableExplosionAnimation = false;
 
