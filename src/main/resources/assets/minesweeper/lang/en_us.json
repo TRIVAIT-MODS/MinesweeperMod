@@ -5,6 +5,7 @@
   "text.autoconfig.minesweeper.option.gridWidth": "Grid width",
   "text.autoconfig.minesweeper.option.gridHeight": "Grid height",
   "text.autoconfig.minesweeper.option.mines": "Mines count",
+  "text.autoconfig.minesweeper.option.soundsVolume": "Sounds volume",
   "text.autoconfig.minesweeper.option.enableAnimations": "Animations",
   "text.autoconfig.minesweeper.option.mainMenuButtonPosition": "Main menu button position",
   "text.autoconfig.minesweeper.option.pauseMenuButtonPosition": "Pause menu button position",
