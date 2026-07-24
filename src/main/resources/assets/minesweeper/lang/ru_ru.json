@@ -5,6 +5,7 @@
   "text.autoconfig.minesweeper.option.gridWidth": "Ширина поля",
   "text.autoconfig.minesweeper.option.gridHeight": "Высота поля",
   "text.autoconfig.minesweeper.option.mines": "Количество мин",
+  "text.autoconfig.minesweeper.option.soundsVolume": "Громкость звуков",
   "text.autoconfig.minesweeper.option.enableAnimations": "Анимации",
   "text.autoconfig.minesweeper.option.mainMenuButtonPosition": "Кнопка в главном меню",
   "text.autoconfig.minesweeper.option.pauseMenuButtonPosition": "Кнопка в меню паузы",
