@@ -85,15 +85,6 @@ public class MinesweeperScreen extends Screen {
         this.initialSave = savedGame;
         this.animations = animations;
         this.gameMode = gameMode;
-
-        if (gameMode==GameMode.DEFAULT) {
-            Config cfg = MinesweeperMod.CONFIG;
-
-            if (savedGame.w!=cfg.gridWidth||savedGame.h!=cfg.gridHeight||savedGame.mines!=cfg.mines) {
-                MinesweeperMod.setSavedGame(null);
-                client.setScreen(new MinesweeperScreen(new GameSettings(cfg.gridWidth, cfg.gridHeight, cfg.mines), cfg.enableAnimations, GameMode.DEFAULT));
-            }
-        }
     }
 
     @Override
@@ -103,6 +94,18 @@ public class MinesweeperScreen extends Screen {
         } else if (board == null) {
             board = new GameBoard(newGameSettings != null ? newGameSettings : defaultSettings());
         }
+
+        if (gameMode == GameMode.DEFAULT) {
+            Config cfg = MinesweeperMod.CONFIG;
+
+            if (board.w!=cfg.gridWidth||board.h!=cfg.gridHeight||board.mines!=cfg.mines) {
+                MinesweeperMod.setSavedGame(null);
+                if (client != null) {
+                    client.setScreen(new MinesweeperScreen(new GameSettings(cfg.gridWidth, cfg.gridHeight, cfg.mines), cfg.enableAnimations, GameMode.DEFAULT));
+                }
+            }
+        }
+
         board.setSoundCallback(makeSoundCallback());
 
         int marginTop = 40 + TOP_BAR_H + 6;
@@ -176,11 +179,11 @@ public class MinesweeperScreen extends Screen {
         return new GameBoard.SoundCallback() {
             public void onReveal() {
                 mc.getSoundManager().play(PositionedSoundInstance.master(
-                    SoundEvents.BLOCK_DEEPSLATE_BREAK, 0.25f, 1.0f));
+                    SoundEvents.BLOCK_DEEPSLATE_BREAK, 0.25f, (float) MinesweeperMod.CONFIG.soundsVolume/100));
             }
             public void onExplode(int cellX, int cellY) {
                 mc.getSoundManager().play(PositionedSoundInstance.master(
-                    SoundEvents.ENTITY_GENERIC_EXPLODE.value(), 0.7f, 1.0f));
+                    SoundEvents.ENTITY_GENERIC_EXPLODE.value(), 0.7f, (float) MinesweeperMod.CONFIG.soundsVolume/100));
                 if (MinesweeperMod.CONFIG.enableExplosionAnimation) {
                     int cx = gridX + cellX * cellSize + cellSize / 2;
                     int cy = gridY + cellY * cellSize + cellSize / 2;
@@ -189,7 +192,7 @@ public class MinesweeperScreen extends Screen {
             }
             public void onWin() {
                 mc.getSoundManager().play(PositionedSoundInstance.master(
-                    SoundEvents.ENTITY_FIREWORK_ROCKET_BLAST, 0.8f, 1.0f));
+                    SoundEvents.ENTITY_FIREWORK_ROCKET_BLAST, 0.8f, (float) MinesweeperMod.CONFIG.soundsVolume/100));
             }
         };
     }
@@ -231,7 +234,7 @@ public class MinesweeperScreen extends Screen {
             return super.mouseClicked(mouseX, mouseY, button);
 
         mc.getSoundManager().play(PositionedSoundInstance.master(
-            SoundEvents.BLOCK_NOTE_BLOCK_HAT.value(), 0.20f, 1.0f));
+            SoundEvents.BLOCK_NOTE_BLOCK_HAT.value(), 0.20f, (float) MinesweeperMod.CONFIG.soundsVolume/100));
 
         Cell c = board.grid[gy][gx];
 
@@ -257,7 +260,7 @@ public class MinesweeperScreen extends Screen {
             }
             if (!animations) {
                 mc.getSoundManager().play(PositionedSoundInstance.master(
-                    SoundEvents.BLOCK_DEEPSLATE_BREAK, 0.25f, 1.0f));
+                    SoundEvents.BLOCK_DEEPSLATE_BREAK, 0.25f, (float) MinesweeperMod.CONFIG.soundsVolume/100));
             }
             board.startRevealWave(gx, gy, animations);
             MinesweeperMod.setSavedGame(board.toSavedGame());

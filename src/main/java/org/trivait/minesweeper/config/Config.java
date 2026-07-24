@@ -12,6 +12,9 @@ public class Config implements ConfigData {
     @ConfigEntry.BoundedDiscrete(min = 4, max = 32)
     public int gridHeight = 16;
 
+    @ConfigEntry.BoundedDiscrete(min = 1, max = 100)
+    public int soundsVolume = 16;
+
     public int mines = 40;
 
     public boolean enableAnimations = true;
