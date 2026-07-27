@@ -80,7 +80,6 @@ public class ScoreLeaderboardScreen extends Screen {
         this.playButton = Button.builder(Component.translatable("leaderboard.play").setStyle(Style.EMPTY.withBold(true)), button -> {
             minecraft.setScreen(new LeaderboardMinesweeperScreen(
                     boardCategory.toGameSettings(),
-                    MinesweeperMod.CONFIG.enableAnimations,
                     GameMode.LEADERBOARD_WIN_COUNT,
                     boardCategory
             ));
