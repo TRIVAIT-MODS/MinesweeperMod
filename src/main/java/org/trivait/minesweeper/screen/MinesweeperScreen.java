@@ -50,7 +50,6 @@ public class MinesweeperScreen extends Screen {
     private final MinecraftClient mc = MinecraftClient.getInstance();
     private final GameSettings newGameSettings;
     private final SavedGame initialSave;
-    private final boolean animations;
 
     protected GameBoard board;
 
@@ -68,19 +67,17 @@ public class MinesweeperScreen extends Screen {
 
     private ButtonWidget leaderboardButton;
 
-    public MinesweeperScreen(GameSettings settings, boolean animations, GameMode gameMode) {
+    public MinesweeperScreen(GameSettings settings, GameMode gameMode) {
         super(Text.empty());
         this.newGameSettings = settings;
         this.initialSave = null;
-        this.animations = animations;
         this.gameMode = gameMode;
     }
 
-    public MinesweeperScreen(SavedGame savedGame, boolean animations, GameMode gameMode) {
+    public MinesweeperScreen(SavedGame savedGame, GameMode gameMode) {
         super(Text.empty());
         this.newGameSettings = null;
         this.initialSave = savedGame;
-        this.animations = animations;
         this.gameMode = gameMode;
     }
 
@@ -94,10 +91,12 @@ public class MinesweeperScreen extends Screen {
 
         if (gameMode == GameMode.DEFAULT) {
             Config cfg = MinesweeperMod.CONFIG;
+            GameSettings normalizedSettings = new GameSettings(cfg.gridWidth, cfg.gridHeight, cfg.mines);
 
-            if (board.w!=cfg.gridWidth||board.h!=cfg.gridHeight||board.mines!=cfg.mines) {
+            if (board.w != normalizedSettings.width() || board.h != normalizedSettings.height() || board.mines != normalizedSettings.mines()) {
                 MinesweeperMod.setSavedGame(null);
-                client.setScreen(new MinesweeperScreen(new GameSettings(cfg.gridWidth, cfg.gridHeight, cfg.mines), cfg.enableAnimations, GameMode.DEFAULT));
+                client.setScreen(new MinesweeperScreen(normalizedSettings, GameMode.DEFAULT));
+                return;
             }
         }
 
@@ -201,7 +200,7 @@ public class MinesweeperScreen extends Screen {
     @Override
     public void tick() {
         if (board == null) return;
-        board.tick(animations);
+        board.tick(MinesweeperMod.CONFIG.enableAnimations);
         updateSmileyState();
         explosions.forEach(ExplosionAnimation::tick);
         explosions.removeIf(e -> e.done);
@@ -218,7 +217,7 @@ public class MinesweeperScreen extends Screen {
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (board == null) return super.mouseClicked(mouseX, mouseY, button);
 
-        if (!board.alive) {
+        if (!board.alive || board.won) {
             if (button == 0) { resetGame(); return true; }
             return super.mouseClicked(mouseX, mouseY, button);
         }
@@ -240,7 +239,7 @@ public class MinesweeperScreen extends Screen {
         }
 
         if (button == 0 && c.revealed) {
-            board.chord(gx, gy, animations);
+            board.chord(gx, gy, MinesweeperMod.CONFIG.enableAnimations);
             MinesweeperMod.setSavedGame(board.toSavedGame());
             return true;
         }
@@ -253,11 +252,11 @@ public class MinesweeperScreen extends Screen {
                 board.timerStartMs = System.currentTimeMillis();
                 board.elapsedSeconds = 0;
             }
-            if (!animations) {
+            if (!MinesweeperMod.CONFIG.enableAnimations) {
                 mc.getSoundManager().play(PositionedSoundInstance.master(
                     SoundEvents.BLOCK_DEEPSLATE_BREAK, 0.25f, (float) MinesweeperMod.CONFIG.soundsVolume /100));
             }
-            board.startRevealWave(gx, gy, animations);
+            board.startRevealWave(gx, gy, MinesweeperMod.CONFIG.enableAnimations);
             MinesweeperMod.setSavedGame(board.toSavedGame());
             return true;
         }
@@ -321,7 +320,7 @@ public class MinesweeperScreen extends Screen {
                 if (hovered && !revealedBg) bg = brighten(bg, 0.10f);
 
                 float cellScale = 1.0f;
-                if (animations && c.revealProgress >= 0f && c.revealProgress < 1f) {
+                if (MinesweeperMod.CONFIG.enableAnimations && c.revealProgress >= 0f && c.revealProgress < 1f) {
                     float t = c.revealProgress < 0.5f ? c.revealProgress / 0.5f : (1f - c.revealProgress) / 0.5f;
                     cellScale = 1.0f + t * 0.15f;
                 }

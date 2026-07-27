@@ -6,15 +6,15 @@ import me.shedaniel.autoconfig.annotation.ConfigEntry;
 @me.shedaniel.autoconfig.annotation.Config(name = "minesweeper")
 public class Config implements ConfigData {
 
-    @ConfigEntry.BoundedDiscrete(min = 4, max = 32)
+    @ConfigEntry.BoundedDiscrete(min = 5, max = 32)
     public int gridWidth = 16;
 
-    @ConfigEntry.BoundedDiscrete(min = 4, max = 32)
+    @ConfigEntry.BoundedDiscrete(min = 5, max = 32)
     public int gridHeight = 16;
 
     public int mines = 40;
 
-    @ConfigEntry.BoundedDiscrete(min = 1, max = 100)
+    @ConfigEntry.BoundedDiscrete(min = 0, max = 100)
     public int soundsVolume = 100;
 
     public boolean enableAnimations = true;
