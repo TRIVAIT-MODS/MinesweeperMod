@@ -34,9 +34,9 @@ public abstract class TitleScreenMixin extends Screen {
                 (button) -> {
                     SavedGame saved = MinesweeperMod.getSavedGame();
                     if (saved != null) {
-                        this.client.setScreen(new MinesweeperScreen(saved, cfg.enableAnimations, GameMode.DEFAULT));
+                        this.client.setScreen(new MinesweeperScreen(saved, GameMode.DEFAULT));
                     } else {
-                        this.client.setScreen(new MinesweeperScreen(new GameSettings(cfg.gridWidth, cfg.gridHeight, cfg.mines), cfg.enableAnimations, GameMode.DEFAULT));
+                        this.client.setScreen(new MinesweeperScreen(new GameSettings(cfg.gridWidth, cfg.gridHeight, cfg.mines), GameMode.DEFAULT));
                     }
                 },
                 true
