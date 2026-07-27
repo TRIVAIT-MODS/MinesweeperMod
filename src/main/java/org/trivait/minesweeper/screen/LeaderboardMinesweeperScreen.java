@@ -24,9 +24,9 @@ public class LeaderboardMinesweeperScreen extends MinesweeperScreen {
 
     private int winCount = 0;
 
-    public LeaderboardMinesweeperScreen(GameSettings settings, boolean animations,
+    public LeaderboardMinesweeperScreen(GameSettings settings,
                                         GameMode lbMode, BoardCategory category) {
-        super(settings, animations, lbMode);
+        super(settings, lbMode);
         this.lbMode = lbMode;
         this.category = category;
         this.playerName = Minecraft.getInstance().getUser().getName();
@@ -131,9 +131,9 @@ public class LeaderboardMinesweeperScreen extends MinesweeperScreen {
         Config cfg = MinesweeperMod.CONFIG;
         SavedGame saved = MinesweeperMod.getSavedGame();
         if (saved != null) {
-            Minecraft.getInstance().gui.setScreen(new MinesweeperScreen(saved, cfg.enableAnimations, GameMode.DEFAULT));
+            Minecraft.getInstance().gui.setScreen(new MinesweeperScreen(saved, GameMode.DEFAULT));
         } else {
-            Minecraft.getInstance().gui.setScreen(new MinesweeperScreen(new GameSettings(cfg.gridWidth, cfg.gridHeight, cfg.mines), cfg.enableAnimations, GameMode.DEFAULT));
+            Minecraft.getInstance().gui.setScreen(new MinesweeperScreen(new GameSettings(cfg.gridWidth, cfg.gridHeight, cfg.mines), GameMode.DEFAULT));
         }
     }
 }

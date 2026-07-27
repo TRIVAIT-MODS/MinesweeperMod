@@ -49,9 +49,9 @@ public abstract class TitleScreenMixin extends Screen {
                 (button) -> {
                     SavedGame saved = MinesweeperMod.getSavedGame();
                     if (saved != null) {
-                        this.minecraft.setScreenAndShow(new MinesweeperScreen(saved, cfg.enableAnimations, GameMode.DEFAULT));
+                        this.minecraft.setScreenAndShow(new MinesweeperScreen(saved, GameMode.DEFAULT));
                     } else {
-                        this.minecraft.setScreenAndShow(new MinesweeperScreen(new GameSettings(cfg.gridWidth, cfg.gridHeight, cfg.mines), cfg.enableAnimations, GameMode.DEFAULT));
+                        this.minecraft.setScreenAndShow(new MinesweeperScreen(new GameSettings(cfg.gridWidth, cfg.gridHeight, cfg.mines), GameMode.DEFAULT));
                     }
                 },
                 true
@@ -101,9 +101,9 @@ public abstract class TitleScreenMixin extends Screen {
                 (button) -> {
                     SavedGame saved = MinesweeperMod.getSavedGame();
                     if (saved != null) {
-                        this.minecraft.setScreenAndShow(new MinesweeperScreen(saved, cfg.enableAnimations, GameMode.DEFAULT));
+                        this.minecraft.setScreenAndShow(new MinesweeperScreen(saved, GameMode.DEFAULT));
                     } else {
-                        this.minecraft.setScreenAndShow(new MinesweeperScreen(new GameSettings(cfg.gridWidth, cfg.gridHeight, cfg.mines), cfg.enableAnimations, GameMode.DEFAULT));
+                        this.minecraft.setScreenAndShow(new MinesweeperScreen(new GameSettings(cfg.gridWidth, cfg.gridHeight, cfg.mines), GameMode.DEFAULT));
                     }
                 },
                 true
