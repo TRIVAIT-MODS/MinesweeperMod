@@ -51,5 +51,9 @@
   "scoreboard.version.update_mod": "Update the mod!",
 
   "modmenu.summaryTranslation.minesweeper": "This mod adds minesweeper in your game!",
-  "modmenu.descriptionTranslation.minesweeper": "This mod adds minesweeper in your game!"
+  "modmenu.descriptionTranslation.minesweeper": "This mod adds minesweeper in your game!",
+
+  "minigames.message.1": "This is last update of this mod. For newer versions please download",
+  "minigames.message.2": "MinigamesMod, besides minesweeper, it includes a bunch of other cool minigames!",
+  "resourcePack.minesweeper": "Vanilla-Style minesweeper"
 }
