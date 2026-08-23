@@ -1,0 +1,2 @@
+Original texture of 8x8 tnt by [Henry_Shaughnessy](https://modrinth.com/user/Henry_Shaughnessy) is licensed under CC BY-NC-SA 4.0.
+Modified by Kostya_Pictures for Minesweeper mod resorcepack. Full license: https://creativecommons.org/licenses/by-nc-sa/4.0/
