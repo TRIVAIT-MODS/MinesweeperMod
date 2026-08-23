@@ -155,6 +155,15 @@ public class MinesweeperScreen extends Screen {
             ).width(20).texture(Identifier.of("minesweeper", "icon/config"), 18, 18).build();
             configBtn.setPosition(width-8-20, 8);
             this.addDrawableChild(configBtn);
+            TextIconButtonWidget minigamesBtn = TextIconButtonWidget.builder(
+                    Text.empty(),
+                    (button) -> {
+                        client.setScreen(new DownloadMinigamesScreen());
+                    },
+                    true
+            ).width(20).texture(Identifier.of("minesweeper", "icon/minigames"), 18, 18).build();
+            minigamesBtn.setPosition(width-8-20-20-5, 8);
+            this.addDrawableChild(minigamesBtn);
         }
     }
 
