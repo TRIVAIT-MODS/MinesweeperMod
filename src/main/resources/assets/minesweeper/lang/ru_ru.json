@@ -51,5 +51,9 @@
   "scoreboard.version.update_mod": "Нужно обновить мод!",
 
   "modmenu.summaryTranslation.minesweeper": "Добавляет сапёр в майнкрафт!",
-  "modmenu.descriptionTranslation.minesweeper": "Добавляет сапёр в майнкрафт!"
+  "modmenu.descriptionTranslation.minesweeper": "Добавляет сапёр в майнкрафт!",
+
+  "minigames.message.1": "Это последняя версия этого мода, для новых версий скачивайте",
+  "minigames.message.2": "MinigamesMod, в нем кроме сапера есть еще много интересных миниигр!",
+  "resourcePack.minesweeper": "Ванильный сапер"
 }
